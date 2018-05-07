@@ -49,7 +49,7 @@ namespace RestAPI.Controllers
                 return _jwtHelper.GenerateJwtToken(model.Email, appUser);
             }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return BadRequest("Invalid Login Attempt");
         }
 
         [HttpPost]
@@ -69,7 +69,7 @@ namespace RestAPI.Controllers
                 return _jwtHelper.GenerateJwtToken(model.Email, user);
             }
 
-            throw new ApplicationException("UNKNOWN_ERROR");
+            return BadRequest("Invalid Register Attempt");
         }
 
         [HttpPost]
