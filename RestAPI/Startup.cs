@@ -35,7 +35,7 @@ namespace RestAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -65,7 +65,7 @@ namespace RestAPI
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Touble Ticket API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Trouble Ticket API", Version = "v1" });
             });
         }
 

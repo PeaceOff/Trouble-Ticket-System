@@ -8,6 +8,6 @@ namespace RestAPI.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        // Extended Properties
+       
     }
 }

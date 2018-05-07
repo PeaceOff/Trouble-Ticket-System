@@ -11,6 +11,7 @@ namespace RestAPI.Controllers
     public class ValuesController : Controller
     {
         // GET api/values
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
