@@ -36,13 +36,15 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(_apiHttpClient.GetBaseAddress() + "/api/account/login", 
+                HttpResponseMessage response = await client.PostAsync(_apiHttpClient.GetBaseAddress() + "/api/Account/Login", 
                     new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
                 if(response.IsSuccessStatusCode)
                 {
-                    //TokenResponse tokenResponse =
-                    //await response.Content.ReadAsAsync<TokenResponse>();
+                    string dataJSON = await response.Content.ReadAsStringAsync();
+                    TokenResponse token = JsonConvert.DeserializeObject<TokenResponse>(dataJSON);
+
+                    _apiHttpClient.StoreToken(token.AcessToken);
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -73,13 +75,15 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(_apiHttpClient.GetBaseAddress() + "/api/account/register",
+                HttpResponseMessage response = await client.PostAsync(_apiHttpClient.GetBaseAddress() + "/api/Account/Register",
                     new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
                 {
-                    //TokenResponse tokenResponse =
-                    //await response.Content.ReadAsAsync<TokenResponse>();
+                    string dataJSON = await response.Content.ReadAsStringAsync();
+                    TokenResponse token = JsonConvert.DeserializeObject<TokenResponse>(dataJSON);
+
+                    _apiHttpClient.StoreToken(token.AcessToken);
 
                     return RedirectToLocal(returnUrl);
                 }

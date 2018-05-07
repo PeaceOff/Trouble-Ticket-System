@@ -7,7 +7,7 @@ namespace WebApplication.Services
 {
     public class ApiHttpClient
     {
-        const string BaseAddress = "https://localhost:50740/";
+        const string BaseAddress = "http://localhost:50740";
         const string SessionKeyToken = "_Token";
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
