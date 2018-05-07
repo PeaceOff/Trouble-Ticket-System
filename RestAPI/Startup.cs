@@ -85,7 +85,7 @@ namespace RestAPI
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Touble Ticket API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trouble Ticket API");
             });
         }
     }
