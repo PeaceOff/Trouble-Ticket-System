@@ -5,6 +5,12 @@ namespace WebApplication.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
+        [RegularExpression(@"^([^0-9]*)$", ErrorMessage = "Only allowed alphabet character in name")]
+        [StringLength(60, MinimumLength = 3)]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
