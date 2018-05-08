@@ -41,14 +41,22 @@ namespace RestAPI.Controllers
         [AllowAnonymous]
         public async Task<object> Login([FromBody] LoginDTO model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
 
             if (result.Succeeded)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return _jwtHelper.GenerateJwtToken(model.Email, appUser);
-            }
+                var appUser = _userManager.Users.SingleOrDefault(r => r.UserName == model.Username);
+                var roles = await _userManager.GetRolesAsync(appUser);
 
+                object token = _jwtHelper.GenerateJwtToken(model.Username, appUser);
+
+                return new LoginResultDTO
+                {
+                    Token = token,
+                    Username = appUser.UserName,
+                    Role = roles.FirstOrDefault()
+                };
+            }
             return BadRequest("Invalid Login Attempt");
         }
 
@@ -58,15 +66,30 @@ namespace RestAPI.Controllers
         {
             var user = new ApplicationUser
             {
-                UserName = model.Email,
+                UserName = model.Username,
                 Email = model.Email
             };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return _jwtHelper.GenerateJwtToken(model.Email, user);
+
+                ApplicationUser appUser = await _userManager.FindByNameAsync(model.Username);
+
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(appUser, model.Role);
+
+                if(result.Succeeded)
+                {
+                    object token = await _jwtHelper.GenerateJwtToken(model.Email, user);
+
+                    return new LoginResultDTO
+                    {
+                        Token = token,
+                        Username = model.Username,
+                        Role = model.Role
+                    };
+                }
             }
 
             return BadRequest("Invalid Register Attempt");
