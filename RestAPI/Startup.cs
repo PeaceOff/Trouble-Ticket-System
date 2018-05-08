@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using RestAPI.Services;
+using System.Threading.Tasks;
 
 namespace RestAPI
 {
@@ -78,7 +79,7 @@ namespace RestAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<ApplicationRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -95,6 +96,8 @@ namespace RestAPI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trouble Ticket API");
             });
+
+            new DatabaseSeed(roleManager).InitDBAsync().Wait();
         }
     }
 }
