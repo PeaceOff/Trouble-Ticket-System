@@ -11,5 +11,9 @@ namespace RestAPI.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+        public DbSet<Ticket> Ticket { get; set; }
+
+        public DbSet<SecondaryTicket> SecondaryTicket { get; set; }
     }
 }
