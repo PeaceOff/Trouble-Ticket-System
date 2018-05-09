@@ -7,11 +7,15 @@ namespace RestAPI.Entities
 {
     public class Ticket
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         public DateTime CreatedAt { get; set; } 
 
+        public string AuthorId { get; set; }
+
         public ApplicationUser Author { get; set; }
+
+        public string SolverId { get; set; }
 
         public ApplicationUser Solver { get; set; }
 
@@ -22,5 +26,7 @@ namespace RestAPI.Entities
         public string Answer { get; set; }
 
         public string State { get; set; }
+
+        public List<SecondaryTicket> SecondaryTickets { get; set; }
     }
 }

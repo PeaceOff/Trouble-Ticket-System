@@ -21,12 +21,14 @@ namespace RestAPI.Controllers
             _context = context;
         }
 
+        // GET: api/SecondaryTickets
         [HttpGet]
         public IEnumerable<SecondaryTicket> GetSecondaryTicket()
         {
             return _context.SecondaryTicket;
         }
 
+        // GET: api/SecondaryTickets/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSecondaryTicket([FromRoute] int id)
         {
@@ -35,7 +37,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var secondaryTicket = await _context.SecondaryTicket.SingleOrDefaultAsync(m => m.ID == id);
+            var secondaryTicket = await _context.SecondaryTicket.SingleOrDefaultAsync(m => m.Id == id);
 
             if (secondaryTicket == null)
             {
@@ -45,6 +47,7 @@ namespace RestAPI.Controllers
             return Ok(secondaryTicket);
         }
 
+        // PUT: api/SecondaryTickets/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSecondaryTicket([FromRoute] int id, [FromBody] SecondaryTicket secondaryTicket)
         {
@@ -53,7 +56,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != secondaryTicket.ID)
+            if (id != secondaryTicket.Id)
             {
                 return BadRequest();
             }
@@ -79,6 +82,7 @@ namespace RestAPI.Controllers
             return NoContent();
         }
 
+        // POST: api/SecondaryTickets
         [HttpPost]
         public async Task<IActionResult> PostSecondaryTicket([FromBody] SecondaryTicket secondaryTicket)
         {
@@ -90,9 +94,10 @@ namespace RestAPI.Controllers
             _context.SecondaryTicket.Add(secondaryTicket);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSecondaryTicket", new { id = secondaryTicket.ID }, secondaryTicket);
+            return CreatedAtAction("GetSecondaryTicket", new { id = secondaryTicket.Id }, secondaryTicket);
         }
 
+        // DELETE: api/SecondaryTickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSecondaryTicket([FromRoute] int id)
         {
@@ -101,7 +106,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var secondaryTicket = await _context.SecondaryTicket.SingleOrDefaultAsync(m => m.ID == id);
+            var secondaryTicket = await _context.SecondaryTicket.SingleOrDefaultAsync(m => m.Id == id);
             if (secondaryTicket == null)
             {
                 return NotFound();
@@ -115,7 +120,7 @@ namespace RestAPI.Controllers
 
         private bool SecondaryTicketExists(int id)
         {
-            return _context.SecondaryTicket.Any(e => e.ID == id);
+            return _context.SecondaryTicket.Any(e => e.Id == id);
         }
     }
 }

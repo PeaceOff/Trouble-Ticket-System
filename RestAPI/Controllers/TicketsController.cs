@@ -21,12 +21,14 @@ namespace RestAPI.Controllers
             _context = context;
         }
 
+        // GET: api/Tickets
         [HttpGet]
         public IEnumerable<Ticket> GetTicket()
         {
             return _context.Ticket;
         }
 
+        // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTicket([FromRoute] int id)
         {
@@ -35,7 +37,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.ID == id);
+            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.Id == id);
 
             if (ticket == null)
             {
@@ -45,6 +47,7 @@ namespace RestAPI.Controllers
             return Ok(ticket);
         }
 
+        // PUT: api/Tickets/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTicket([FromRoute] int id, [FromBody] Ticket ticket)
         {
@@ -53,7 +56,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != ticket.ID)
+            if (id != ticket.Id)
             {
                 return BadRequest();
             }
@@ -79,6 +82,7 @@ namespace RestAPI.Controllers
             return NoContent();
         }
 
+        // POST: api/Tickets
         [HttpPost]
         public async Task<IActionResult> PostTicket([FromBody] Ticket ticket)
         {
@@ -90,9 +94,10 @@ namespace RestAPI.Controllers
             _context.Ticket.Add(ticket);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTicket", new { id = ticket.ID }, ticket);
+            return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
         }
 
+        // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket([FromRoute] int id)
         {
@@ -101,7 +106,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.ID == id);
+            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
                 return NotFound();
@@ -115,7 +120,7 @@ namespace RestAPI.Controllers
 
         private bool TicketExists(int id)
         {
-            return _context.Ticket.Any(e => e.ID == id);
+            return _context.Ticket.Any(e => e.Id == id);
         }
     }
 }
