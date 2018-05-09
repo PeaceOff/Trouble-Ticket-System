@@ -1,13 +1,8 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
 const amqp = require('amqplib/callback_api')
 const jsonfile = require('jsonfile')
 const dept = 'genius'
 const msgFile = `./data/${dept}.json`
 var tickets
-
-document.getElementById('title').innerHTML = `${dept.toUpperCase()} department`
 
 // Connecting to the Message Queue
 amqp.connect('amqp://localhost', function (err, conn) {
@@ -57,3 +52,8 @@ function storeData () {
 
 // Loading data on start
 loadData()
+
+module.exports = {
+  dept,
+  tickets
+}
