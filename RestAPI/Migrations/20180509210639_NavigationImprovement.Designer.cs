@@ -11,9 +11,10 @@ using System;
 namespace RestAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180509210639_NavigationImprovement")]
+    partial class NavigationImprovement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,7 +201,7 @@ namespace RestAPI.Migrations
 
                     b.Property<int>("TicketId");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Tittle");
 
                     b.HasKey("Id");
 
@@ -226,7 +227,7 @@ namespace RestAPI.Migrations
 
                     b.Property<string>("State");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Tittle");
 
                     b.HasKey("Id");
 
@@ -285,7 +286,7 @@ namespace RestAPI.Migrations
             modelBuilder.Entity("RestAPI.Entities.SecondaryTicket", b =>
                 {
                     b.HasOne("RestAPI.Entities.Ticket", "Ticket")
-                        .WithMany("SecondaryTickets")
+                        .WithMany("Tickets")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

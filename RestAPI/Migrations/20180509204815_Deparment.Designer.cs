@@ -11,9 +11,10 @@ using System;
 namespace RestAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180509204815_Deparment")]
+    partial class Deparment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +188,7 @@ namespace RestAPI.Migrations
 
             modelBuilder.Entity("RestAPI.Entities.SecondaryTicket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Answer");
@@ -198,20 +199,20 @@ namespace RestAPI.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("TicketId");
+                    b.Property<int?>("TicketID");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Tittle");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("TicketID");
 
                     b.ToTable("SecondaryTicket");
                 });
 
             modelBuilder.Entity("RestAPI.Entities.Ticket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Answer");
@@ -226,9 +227,9 @@ namespace RestAPI.Migrations
 
                     b.Property<string>("State");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Tittle");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("AuthorId");
 
@@ -285,9 +286,8 @@ namespace RestAPI.Migrations
             modelBuilder.Entity("RestAPI.Entities.SecondaryTicket", b =>
                 {
                     b.HasOne("RestAPI.Entities.Ticket", "Ticket")
-                        .WithMany("SecondaryTickets")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("TicketID");
                 });
 
             modelBuilder.Entity("RestAPI.Entities.Ticket", b =>
