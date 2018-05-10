@@ -17,7 +17,7 @@ namespace RestAPI.Entities
 
         public string Department { get; set; }
 
-        public string Tittle { get; set; }
+        public string Title { get; set; }
 
         public string Description { get; set; }
 
