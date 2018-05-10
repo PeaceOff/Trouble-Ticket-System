@@ -35,6 +35,7 @@ amqp.connect('amqp://localhost', function (err, conn) {
 function onMessageReceived (msg) {
   console.log(' [x] Received %s', msg.content.toString())
 
+  // TODO: implementar lógica para receber novos tickets
   tickets.push({id: 5, title: 'bom dia alegria', description: 'esta descrição é muito boa.'})
   storeData()
 }

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Message from '../../messageQueue'
+import Message from './messageQueue'
 
 export default {
   name: 'landing-page',
