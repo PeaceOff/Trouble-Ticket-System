@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication.Models.AccountViewModels
 {
@@ -8,7 +10,11 @@ namespace WebApplication.Models.AccountViewModels
         [RegularExpression(@"^([^0-9]*)$", ErrorMessage = "Only allowed alphabet character in name")]
         [StringLength(60, MinimumLength = 3)]
         [Display(Name = "Name")]
-        public string Name { get; set; }
+        public string Username { get; set; }
+
+        [Required]
+        [Display(Name = "Role")]
+        public string Role { get; set; }
 
         [Required]
         [EmailAddress]

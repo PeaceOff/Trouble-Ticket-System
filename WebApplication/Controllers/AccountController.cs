@@ -1,21 +1,25 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using WebApplication.Models.AccountViewModels;
 using WebApplication.Services;
+using static WebApplication.Models.AccountViewModels.RegisterViewModel;
 
 namespace WebApplication.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ApiHttpClient _apiHttpClient;
+        private readonly RestService _restService;
 
-        public AccountController(ApiHttpClient apiHttpClient)
+        public AccountController(RestService restService)
         {
-            _apiHttpClient = apiHttpClient;
+            _restService = restService;
         }
 
         [HttpGet]
@@ -36,15 +40,15 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(_apiHttpClient.GetBaseAddress() + "/api/Account/Login", 
+                HttpResponseMessage response = await client.PostAsync(_restService.GetBaseAddress() + "/api/Account/Login", 
                     new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
                 if(response.IsSuccessStatusCode)
                 {
                     string dataJSON = await response.Content.ReadAsStringAsync();
-                    TokenResponse token = JsonConvert.DeserializeObject<TokenResponse>(dataJSON);
+                    LoginResponse token = JsonConvert.DeserializeObject<LoginResponse>(dataJSON);
 
-                    _apiHttpClient.StoreToken(token.AcessToken);
+                    _restService.StoreLoginResponse(token);
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -63,6 +67,7 @@ namespace WebApplication.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             return View();
         }
 
@@ -75,15 +80,15 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(_apiHttpClient.GetBaseAddress() + "/api/Account/Register",
+                HttpResponseMessage response = await client.PostAsync(_restService.GetBaseAddress() + "/api/Account/Register",
                     new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
                 {
                     string dataJSON = await response.Content.ReadAsStringAsync();
-                    TokenResponse token = JsonConvert.DeserializeObject<TokenResponse>(dataJSON);
+                    RegisterResponse token = JsonConvert.DeserializeObject<RegisterResponse>(dataJSON);
 
-                    _apiHttpClient.StoreToken(token.AcessToken);
+                    _restService.StoreRegisterResponse(token);
 
                     return RedirectToLocal(returnUrl);
                 }
@@ -102,7 +107,7 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            _apiHttpClient.RemoveToken();
+            _restService.RemoveToken();
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

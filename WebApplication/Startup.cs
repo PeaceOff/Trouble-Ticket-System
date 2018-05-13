@@ -26,7 +26,7 @@ namespace WebApplication
         {
             services.AddMvc();
 
-            services.AddTransient<ApiHttpClient>();
+            services.AddTransient<RestService>();
 
             services.AddDistributedMemoryCache();
 

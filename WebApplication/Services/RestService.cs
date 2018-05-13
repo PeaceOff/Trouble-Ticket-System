@@ -5,14 +5,16 @@ using System.Net.Http.Headers;
 
 namespace WebApplication.Services
 {
-    public class ApiHttpClient
+    public class RestService
     {
-        const string BaseAddress = "http://localhost:50740";
+        const string BaseAddress = "http://localhost:51568";
         const string SessionKeyToken = "_Token";
+        const string SessionKeyRole = "_Role";
+        const string SessionKeyUsername = "_Username";
         private readonly IHttpContextAccessor _httpContextAccessor;
         private ISession _session => _httpContextAccessor.HttpContext.Session;
 
-        public ApiHttpClient(IHttpContextAccessor httpContextAccessor)
+        public RestService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
@@ -37,18 +39,38 @@ namespace WebApplication.Services
             return client;
         }
 
-        public void StoreToken(String token)
+        public void StoreLoginResponse(LoginResponse token)
         {
-            _session.SetString(SessionKeyToken, token);
+            _session.SetString(SessionKeyToken, token.AccessToken.Token);
+            _session.SetString(SessionKeyRole, token.Role);
+            _session.SetString(SessionKeyUsername, token.Username);
         }
-        public String GetToken()
+
+        public void StoreRegisterResponse(RegisterResponse token)
         {
-            return _session.GetString(SessionKeyToken);
+            _session.SetString(SessionKeyToken, token.AccessToken);
+            _session.SetString(SessionKeyRole, token.Role);
+            _session.SetString(SessionKeyUsername, token.Username);
         }
 
         public void RemoveToken()
         {
             _session.Remove(SessionKeyToken);
+        }
+
+        public String GetToken()
+        {
+            return _session.GetString(SessionKeyToken);
+        }
+
+        public String GetUsername()
+        {
+            return _session.GetString(SessionKeyUsername);
+        }
+
+        public String GetRole()
+        {
+            return _session.GetString(SessionKeyRole);
         }
 
         public String GetBaseAddress()
