@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
-    public class TroubleTicket
+    public class SecondaryTicket
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
-        public String Authour { get; set; }
+        public int TicketId { get; set; }
 
-        public String Solver { get; set; }
+        public Ticket Ticket { get; set; }
 
         public String Title { get; set; }
 
@@ -19,9 +19,8 @@ namespace WebApplication.Models
 
         public String Answer { get; set; }
 
-        //TODO É Enum ou String?
-        public String State { get; set; }
+        public String Department { get; set; }
 
-        public DateTime createdAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
