@@ -13,10 +13,6 @@ namespace WebApplication.Models.AccountViewModels
         public string Username { get; set; }
 
         [Required]
-        [Display(Name = "Role")]
-        public string Role { get; set; }
-
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

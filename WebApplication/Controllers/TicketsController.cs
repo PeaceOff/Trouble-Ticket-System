@@ -78,10 +78,6 @@ namespace WebApplication.Controllers
             
             if (ModelState.IsValid)
             {
-                //TODO Associar o user logado ao autor do ticket
-                ticket.CreatedAt = DateTime.Now;
-                ticket.State = "Unassigned";
-
                 HttpClient client = _restService.GetClient();
                 HttpResponseMessage response = await client.PostAsync(_restService.GetBaseAddress() + "/api/Tickets/",
                     new StringContent(JsonConvert.SerializeObject(ticket), Encoding.UTF8, "application/json"));
@@ -98,96 +94,5 @@ namespace WebApplication.Controllers
 
             return View(ticket);
         }
-
-        // GET: Tickets/Edit/5
-        /*public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.ID == id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AuthorId);
-            ViewData["SolverId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.SolverId);
-            return View(ticket);
-        }
-
-        // POST: Tickets/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,AuthorId,SolverId,Title,Description,Answer,State,CreatedAt")] Ticket ticket)
-        {
-            if (id != ticket.ID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ticket);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TicketExists(ticket.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.AuthorId);
-            ViewData["SolverId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", ticket.SolverId);
-            return View(ticket);
-        }
-
-        // GET: Tickets/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ticket = await _context.Ticket
-                .Include(t => t.Author)
-                .Include(t => t.Solver)
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
-
-            return View(ticket);
-        }
-
-        // POST: Tickets/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Ticket.Remove(ticket);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool TicketExists(int id)
-        {
-            return _context.Ticket.Any(e => e.ID == id);
-        }*/
     }
 }
