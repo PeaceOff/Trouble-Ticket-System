@@ -15,8 +15,6 @@ namespace RestAPI.Entities
 
         public Ticket Ticket { get; set; }
 
-        public string Department { get; set; }
-
         public string Title { get; set; }
 
         public string Description { get; set; }
