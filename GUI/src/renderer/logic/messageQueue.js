@@ -1,6 +1,7 @@
+require('dotenv').config()
 const amqp = require('amqplib/callback_api')
 const jsonfile = require('jsonfile')
-const dept = 'hello'
+const dept = process.env.DEPARTMENT_NAME || 'hello'
 const msgFile = `./${dept}.json`
 let tickets = []
 
@@ -35,8 +36,9 @@ amqp.connect('amqp://localhost', function (err, conn) {
 function onMessageReceived (msg) {
   console.log(' [x] Received %s', msg.content.toString())
 
-  // TODO: implementar lógica para receber novos tickets
-  tickets.push({id: 5, title: 'bom dia alegria', description: 'esta descrição é muito boa.'})
+  let nTicket = JSON.parse(msg.content.toString())
+  // {id: ++_id, title: 'bom dia alegria', description: 'esta descrição é muito boa.'}
+  tickets.push(nTicket)
   storeData()
 }
 
@@ -47,7 +49,13 @@ function storeData () {
   })
 }
 
+function setTickets (t) {
+  tickets = t
+  storeData()
+}
+
 module.exports = {
   dept,
-  tickets
+  tickets,
+  setTickets
 }

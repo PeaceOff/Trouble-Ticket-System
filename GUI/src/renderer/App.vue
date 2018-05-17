@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <landing-page></landing-page>
+    <department></department>
   </div>
 </template>
 
 <script>
-  import LandingPage from '@/components/LandingPage'
+  import Department from '@/components/Department'
 
   export default {
     name: 'gui',
     components: {
-      LandingPage
+      Department
     }
   }
 </script>

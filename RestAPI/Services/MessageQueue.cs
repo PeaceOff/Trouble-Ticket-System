@@ -1,38 +1,46 @@
-﻿using RabbitMQ.Client;
+﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
 using System;
 using System.Text;
 
 namespace RestAPI.Services
 {
-    public class MessageQueue
+    public static class MessageQueue
     {
-        private MessageQueue() {
-            int i = 1;
-            do
+        private static ConnectionFactory factory = new ConnectionFactory() { HostName = "localhost" };
+        private static string DEPT_NAME = "memes";
+
+        public static void SendMessageToDepartment(string id, string title, string description) {
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
             {
-                var factory = new ConnectionFactory() { HostName = "localhost" };
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel())
-                {
-                    channel.QueueDeclare(queue: "hello",
-                                         durable: false,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
+                channel.QueueDeclare(queue: DEPT_NAME,
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
-                    string message = i + ": Hello World!";
-                    var body = Encoding.UTF8.GetBytes(message);
+                string message = JsonConvert.SerializeObject(new DeptMessage(id,title,description));
+                var body = Encoding.UTF8.GetBytes(message);
 
-                    channel.BasicPublish(exchange: "",
-                                         routingKey: "hello",
-                                         basicProperties: null,
-                                         body: body);
-                    Console.WriteLine(" [x] Sent {0}", message);
-                }
+                channel.BasicPublish(exchange: "",
+                                     routingKey: DEPT_NAME,
+                                     basicProperties: null,
+                                     body: body);
+            }
+        }
 
-                Console.WriteLine(" Press 'q' to exit.");
-                i++;
-            } while (Console.ReadLine() != "q");
+        private class DeptMessage {
+            string id;
+            string title;
+            string description;
+
+            public DeptMessage(string i, string t, string d) {
+                id = i;
+                title = t;
+                description = d;
+            }
         }
     }
 }
