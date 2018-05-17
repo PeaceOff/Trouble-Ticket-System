@@ -15,17 +15,11 @@ namespace WebApplication.Controllers
 {
     public class TicketsController : Controller
     {
-        private readonly RestService _restService;
-
-        public TicketsController(RestService restService)
-        {
-            _restService = restService;
-        }
 
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-            HttpClient client = _restService.GetClient();
+            HttpClient client = RestService.GetClient();
             HttpResponseMessage response = await client.GetAsync("api/Tickets/");
 
             if (response.IsSuccessStatusCode)
@@ -64,7 +58,7 @@ namespace WebApplication.Controllers
         // GET: Tickets/Create
         public IActionResult Create()
         {
-            ViewData["Username"] = _restService.GetUsername();
+            ViewData["Username"] = RestService.Username;
             return View();
         }
 
@@ -78,8 +72,8 @@ namespace WebApplication.Controllers
             
             if (ModelState.IsValid)
             {
-                HttpClient client = _restService.GetClient();
-                HttpResponseMessage response = await client.PostAsync(_restService.GetBaseAddress() + "/api/Tickets/",
+                HttpClient client = RestService.GetClient();
+                HttpResponseMessage response = await client.PostAsync(RestService.BaseAddress + "/api/Tickets/",
                     new StringContent(JsonConvert.SerializeObject(ticket), Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
@@ -88,7 +82,7 @@ namespace WebApplication.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Error", "Home");
+                    return RedirectToAction("Create", "Tickets");
                 }
             }
 

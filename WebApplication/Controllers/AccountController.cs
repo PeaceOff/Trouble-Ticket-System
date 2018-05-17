@@ -15,13 +15,6 @@ namespace WebApplication.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly RestService _restService;
-
-        public AccountController(RestService restService)
-        {
-            _restService = restService;
-        }
-
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
@@ -40,7 +33,7 @@ namespace WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(_restService.GetBaseAddress() + "/api/Account/Login", 
+                HttpResponseMessage response = await client.PostAsync(RestService.BaseAddress + "/api/Account/Login", 
                     new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
                 if(response.IsSuccessStatusCode)
@@ -48,9 +41,9 @@ namespace WebApplication.Controllers
                     string dataJSON = await response.Content.ReadAsStringAsync();
                     LoginResponse token = JsonConvert.DeserializeObject<LoginResponse>(dataJSON);
 
-                    _restService.StoreLoginResponse(token);
+                    RestService.StoreLoginResponse(token);
 
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Tickets");
                 }
                 else
                 {
@@ -79,8 +72,9 @@ namespace WebApplication.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                model.Role = "Worker";
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(_restService.GetBaseAddress() + "/api/Account/Register",
+                HttpResponseMessage response = await client.PostAsync(RestService.BaseAddress + "/api/Account/Register",
                     new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
@@ -88,9 +82,9 @@ namespace WebApplication.Controllers
                     string dataJSON = await response.Content.ReadAsStringAsync();
                     RegisterResponse token = JsonConvert.DeserializeObject<RegisterResponse>(dataJSON);
 
-                    _restService.StoreRegisterResponse(token);
+                    RestService.StoreRegisterResponse(token);
 
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Tickets");
                 }
                 else
                 {
@@ -107,7 +101,7 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            _restService.RemoveToken();
+            RestService.RemoveToken();
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

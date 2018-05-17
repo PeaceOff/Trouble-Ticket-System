@@ -7,75 +7,55 @@ namespace WebApplication.Services
 {
     public class RestService
     {
-        const string BaseAddress = "http://localhost:51568";
-        const string SessionKeyToken = "_Token";
-        const string SessionKeyRole = "_Role";
-        const string SessionKeyUsername = "_Username";
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private ISession _session => _httpContextAccessor.HttpContext.Session;
+        public static string BaseAddress = "http://localhost:51568";
+        private static HttpClient Client;
 
-        public RestService(IHttpContextAccessor httpContextAccessor)
+        public static void SetClient()
         {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public HttpClient GetClient()
-        {
-            HttpClient client = new HttpClient
+            Client = new HttpClient
             {
                 BaseAddress = new Uri(BaseAddress)
             };
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Client.DefaultRequestHeaders.Accept.Clear();
+            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            String token = GetToken();
-
-            if (token != null)
+            if (Token != null)
             {
-                client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+                Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", Token);
             }
-
-            return client;
         }
 
-        public void StoreLoginResponse(LoginResponse token)
+        public static void StoreLoginResponse(LoginResponse token)
         {
-            _session.SetString(SessionKeyToken, token.AccessToken.Token);
-            _session.SetString(SessionKeyRole, token.Role);
-            _session.SetString(SessionKeyUsername, token.Username);
+            Token = token.AccessToken.Token;
+            Username = token.Username;
+            Role = token.Role;
+            SetClient();
         }
 
-        public void StoreRegisterResponse(RegisterResponse token)
+        public static void StoreRegisterResponse(RegisterResponse token)
         {
-            _session.SetString(SessionKeyToken, token.AccessToken);
-            _session.SetString(SessionKeyRole, token.Role);
-            _session.SetString(SessionKeyUsername, token.Username);
+            Token = token.AccessToken;
+            Role = token.Role;
+            Username = token.Username;
+            SetClient();
         }
 
-        public void RemoveToken()
+        public static String Token { get; set; }
+
+        public static String Username { get; set; }
+
+        public static String Role { get; set; }
+
+        public static HttpClient GetClient()
         {
-            _session.Remove(SessionKeyToken);
+            return Client;
         }
 
-        public String GetToken()
+        public static void RemoveToken()
         {
-            return _session.GetString(SessionKeyToken);
-        }
-
-        public String GetUsername()
-        {
-            return _session.GetString(SessionKeyUsername);
-        }
-
-        public String GetRole()
-        {
-            return _session.GetString(SessionKeyRole);
-        }
-
-        public String GetBaseAddress()
-        {
-            return BaseAddress;
+            Token = null;
         }
     }
 }
