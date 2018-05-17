@@ -76,6 +76,8 @@ namespace RestAPI
             {
                 c.SwaggerDoc("v1", new Info { Title = "Trouble Ticket API", Version = "v1" });
             });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,7 +99,13 @@ namespace RestAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trouble Ticket API");
             });
 
-            new DatabaseSeed(roleManager).InitDBAsync().Wait();
+            app.UseCors(builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+
+            new DatabaseSeed(roleManager).InitDBAsync().Wait();   
         }
     }
 }
