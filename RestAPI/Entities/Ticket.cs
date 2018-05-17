@@ -25,6 +25,7 @@ namespace RestAPI.Entities
 
         public string Answer { get; set; }
 
+        // 'Unassigned', 'Assigned', 'WaitingForAnswers', 'Solved'
         public string State { get; set; }
 
         public List<SecondaryTicket> SecondaryTickets { get; set; }

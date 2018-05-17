@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +22,26 @@ namespace RestAPI.Controllers
             _context = context;
         }
 
-        // GET: api/SecondaryTickets
         [HttpGet]
         public IEnumerable<SecondaryTicket> GetSecondaryTicket()
         {
             return _context.SecondaryTicket;
         }
 
-        // GET: api/SecondaryTickets/5
+        [HttpGet("UnassignedSecondaryTickets")]
+        public IEnumerable<SecondaryTicket> GetUnassignedSecondaryTickets()
+        {
+            return _context.SecondaryTicket.Where(st => st.Answer == null).ToList();
+        }
+
+        [HttpGet("SolverSecondaryTickets")]
+        public IEnumerable<SecondaryTicket> GetSolverSecondaryTickets()
+        {
+            string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            return _context.SecondaryTicket.Where(st => st.Ticket.SolverId == id).ToList();
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSecondaryTicket([FromRoute] int id)
         {
@@ -47,7 +60,6 @@ namespace RestAPI.Controllers
             return Ok(secondaryTicket);
         }
 
-        // PUT: api/SecondaryTickets/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSecondaryTicket([FromRoute] int id, [FromBody] SecondaryTicket secondaryTicket)
         {
@@ -82,7 +94,6 @@ namespace RestAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/SecondaryTickets
         [HttpPost]
         public async Task<IActionResult> PostSecondaryTicket([FromBody] SecondaryTicket secondaryTicket)
         {
@@ -97,7 +108,6 @@ namespace RestAPI.Controllers
             return CreatedAtAction("GetSecondaryTicket", new { id = secondaryTicket.Id }, secondaryTicket);
         }
 
-        // DELETE: api/SecondaryTickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSecondaryTicket([FromRoute] int id)
         {
