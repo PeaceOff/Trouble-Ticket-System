@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Entities;
+using RestAPI.Services;
 
 namespace RestAPI.Controllers
 {
@@ -104,6 +105,8 @@ namespace RestAPI.Controllers
 
             _context.SecondaryTicket.Add(secondaryTicket);
             await _context.SaveChangesAsync();
+
+            MessageQueue.SendMessageToDepartment(secondaryTicket.Id.ToString(), secondaryTicket.Title, secondaryTicket.Description);
 
             return CreatedAtAction("GetSecondaryTicket", new { id = secondaryTicket.Id }, secondaryTicket);
         }
