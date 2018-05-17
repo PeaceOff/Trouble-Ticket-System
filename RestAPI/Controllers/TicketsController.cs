@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,15 +23,40 @@ namespace RestAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Tickets
         [HttpGet]
+        [Authorize]
         public IEnumerable<Ticket> GetTicket()
         {
             return _context.Ticket;
         }
 
-        // GET: api/Tickets/5
+        [HttpGet("UnassignedTickets")]
+        [Authorize]
+        public IEnumerable<Ticket> GetUnassignedTickets()
+        {
+            return _context.Ticket.Where(t => t.State == "Unassigned").ToList();
+        }
+
+        [HttpGet("WorkerTickets")]
+        [Authorize]
+        public IEnumerable<Ticket> GetWorkerTickets()
+        {
+            string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            return _context.Ticket.Where(t => t.AuthorId == id).ToList();
+        }
+
+        [HttpGet("SolverTickets")]
+        [Authorize]
+        public IEnumerable<Ticket> GetSolverTickets()
+        {
+            string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            
+            return _context.Ticket.Where(t => t.SolverId == id).ToList();
+        }
+
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetTicket([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -47,8 +74,8 @@ namespace RestAPI.Controllers
             return Ok(ticket);
         }
 
-        // PUT: api/Tickets/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutTicket([FromRoute] int id, [FromBody] Ticket ticket)
         {
             if (!ModelState.IsValid)
@@ -82,8 +109,8 @@ namespace RestAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Tickets
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostTicket([FromBody] Ticket ticket)
         {
             if (!ModelState.IsValid)
@@ -91,14 +118,18 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            ticket.CreatedAt = DateTime.Now;
+            ticket.AuthorId = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            ticket.State = "Unassigned";
+
             _context.Ticket.Add(ticket);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTicket", new { id = ticket.Id }, ticket);
         }
 
-        // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTicket([FromRoute] int id)
         {
             if (!ModelState.IsValid)
