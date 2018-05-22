@@ -1,5 +1,16 @@
 <template>
   <div class="container">
+    <div class="row-md-12">
+      <nav class="navbar navbar-expand navbar-light bg-light justify-content-between">
+        <div>
+          <a class="navbar-brand">Trouble Ticket System</a>
+        </div>
+        <div>
+          <span>Hello {{ username }}!</span>
+          <button class="btn btn-secondary btn-sm" @click="logout()">Logout</button>
+        </div>
+      </nav>
+    </div>
     <div class="row justify-content-md-center mt-3">
       <h1>IT Department</h1>
     </div>
@@ -34,11 +45,15 @@ export default {
   name: 'department_it',
   data () {
     return {
+      username: this.$store.getters.getUsername,
       tickets: Message.tickets,
       showAlert: false
     }
   },
   methods: {
+    logout () {
+      this.$store.dispatch('logout')
+    },
     cardClicked: function (id, answer) {
       if (answer) {
         // Submit answer to API

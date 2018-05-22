@@ -28,7 +28,7 @@
 
 <script>
 import Message from '../logic/messageQueue'
-import API from '../logic/proxy'
+import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
 
 export default {
   name: 'department',
@@ -40,10 +40,10 @@ export default {
     }
   },
   methods: {
-    cardClicked: function (id, answer) {
+    cardClicked: async function (id, answer) {
       if (answer) {
         // Submit answer to API
-        API.answerSecondaryQuestion(id, answer)
+        await new SecondaryTicketProxy().update(id, answer)
         // Delete ticket has it was already answered
         this.tickets = this.tickets.filter(ticket => ticket.id !== id)
         // Save the tickets to the file

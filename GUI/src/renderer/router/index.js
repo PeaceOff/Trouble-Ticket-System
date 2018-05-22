@@ -1,42 +1,61 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
-  routes: [
-    {
-      path: '/home',
-      name: 'home',
-      component: () =>
-        import('@/components/Home')
-    },
-    {
-      path: '/department',
-      name: 'department',
-      component: () =>
-        import('@/components/Department')
-    },
-    {
-      path: '/department_it',
-      name: 'department_it',
-      component: () =>
-        import('@/components/DepartmentIT')
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () =>
-        import('@/components/Auth/Login')
-    },
-    {
-      path: '/',
-      redirect: '/home'
-    },
-    {
-      path: '*',
-      redirect: '/home'
-    }
-  ],
+// Authenticated route
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isLoggedIn) {
+    next()
+    return
+  }
+  next('/login')
+}
+
+const routes = [
+  {
+    path: '/home',
+    name: 'home',
+    component: () =>
+      import('@/components/Home')
+  },
+  {
+    path: '/department',
+    name: 'department',
+    component: () =>
+      import('@/components/Department')
+  },
+  {
+    path: '/department_it',
+    name: 'department_it',
+    component: () =>
+      import('@/components/DepartmentIT'),
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () =>
+      import('@/components/Auth/Login')
+  },
+  {
+    path: '/',
+    redirect: '/home'
+  },
+  {
+    path: '*',
+    redirect: '/home'
+  }
+]
+
+export const router = new VueRouter({
+  routes,
   mode: 'history'
 })
+
+Vue.router = router
+
+export default {
+  router
+}

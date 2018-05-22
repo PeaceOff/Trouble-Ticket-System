@@ -1,21 +1,24 @@
 import Vue from 'vue'
-import API from '@/logic/proxy'
+import AuthProxy from '@/proxies/AuthProxy'
 import {
-  LOGIN,
-  // LOGIN_SUCCESS,
+  CHECK_LOGIN,
+  LOGIN_SUCCESS,
   LOGOUT
 } from './mutations-types'
 
+export const check = ({ commit }) => {
+  commit(CHECK_LOGIN)
+}
+
 export const login = async ({ commit }, data) => {
-  commit(LOGIN)
   try {
-    const response = await API.login(data)
-    // commit(LOGIN_SUCCESS, response.data);
-    /* Vue.router.push({
-    name: 'department_it',
-    }); */
-    console.log(response)
-    // localStorage.setItem("token", "JWT");
+    const response = await new AuthProxy().login(data)
+    commit(LOGIN_SUCCESS, response)
+
+    Vue.router.push({
+      name: 'department_it'
+    })
+
     return { success: true }
   } catch (e) {
     throw e
@@ -31,6 +34,7 @@ export const logout = ({ commit, state }) => {
 }
 
 export default {
+  check,
   login,
   logout
 }

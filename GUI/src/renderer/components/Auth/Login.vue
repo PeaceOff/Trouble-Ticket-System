@@ -23,7 +23,14 @@ export default {
   },
   methods: {
     async login () {
-      //
+      this.$store.dispatch('login', {
+        username: this.username,
+        password: this.password
+      }).then(() => {
+        console.log('Fez o dispatch com sucesso')
+      }).catch((err) => {
+        console.log(err)
+      })
     }
   }
 }
