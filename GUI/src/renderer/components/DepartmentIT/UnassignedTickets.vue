@@ -28,20 +28,13 @@
           <h5 class="card-title">{{ ticket.title }}</h5>
           <p class="card-text">{{ ticket.description }}</p>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" v-model="ticket.answer" placeholder="Answer" aria-describedby="basic-addon2">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" v-on:click="cardClicked(ticket.id,ticket.answer)">Submit</button>
+              <button class="btn btn-success" type="button" v-on:click="assignTicket(ticket.id)">Assign</button>
             </div>
           </div>
         </div>        
       </div>
     </div>
-    <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert">
-      You must provide an answer before submitting!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      </div>
   </div>
 </template>
 
@@ -53,14 +46,12 @@ export default {
   data () {
     return {
       username: this.$store.getters.getUsername,
-      tickets: '',
-      showAlert: false
+      tickets: ''
     }
   },
   async created () {
     try {
       const response = await new TicketProxy().getUnassignedTickets()
-      console.log(response)
       this.tickets = response
     } catch (e) {
       console.log(e)
@@ -69,23 +60,15 @@ export default {
   methods: {
     logout () {
       this.$store.dispatch('logout')
-    }
-    /* ,
-    cardClicked: function (id, answer) {
-      if (answer) {
-        // Submit answer to API
-        API.answerSecondaryQuestion(id, answer)
-        // Delete ticket has it was already answered
-        this.tickets = this.tickets.filter(ticket => ticket.id !== id)
-        // Save the tickets to the file
-        Message.setTickets(this.tickets)
-      } else {
-        this.toggleAlert()
-      }
     },
-    toggleAlert () {
-      this.showAlert = !this.showAlert
-    } */
+    async assignTicket (id) {
+      try {
+        await new TicketProxy().assignTicket(id)
+        this.tickets.splice(this.tickets.findIndex(x => x.id === id), 1)
+      } catch (e) {
+        console.log(e)
+      }
+    }
   }
 }
 </script>

@@ -33,6 +33,15 @@ class TicketProxy extends Proxy {
   getSolverTickets () {
     return this.submit('get', `${this.endpoint}/SolverTickets`)
   }
+
+  /**
+   * Method used to assign a ticket to the solver
+   *
+   * @returns {Promise} The result in a promise.
+   */
+  assignTicket (id) {
+    return this.submit('put', `${this.endpoint}/AssignTicket/${id}`)
+  }
 }
 
 export default TicketProxy
