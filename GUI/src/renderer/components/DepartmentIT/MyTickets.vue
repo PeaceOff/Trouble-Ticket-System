@@ -15,12 +15,16 @@
       <h1>IT Department</h1>
     </div>
     <div class="row justify-content-md-center mt-3">
-        <nav aria-label="...">
-            <ul class="pagination pagination-lg">
-                <li class="page-item"><a class="page-link"><router-link to="unassigned_tickets">Unassigned Tickets</router-link></a></li>
-                <li class="page-item disabled"><a class="page-link" tabindex="-1">My Tickets</a></li>
-            </ul>
-        </nav>
+      <nav aria-label="...">
+        <ul class="pagination pagination-lg">
+          <li class="page-item">
+            <a class="page-link">
+              <router-link to="unassigned_tickets">Unassigned Tickets</router-link>
+            </a>
+          </li>
+          <li class="page-item disabled"><a class="page-link" tabindex="-1">My Tickets</a></li>
+        </ul>
+      </nav>
     </div>
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
@@ -31,64 +35,50 @@
             <input type="text" class="form-control" v-model="ticket.answer" placeholder="Answer" aria-describedby="basic-addon2">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="button" v-on:click="cardClicked(ticket.id,ticket.answer)">Submit</button>
+              <router-link :to="{ name: 'secondaryTicket', params: { id: ticket.id }}">Create secondary ticket</router-link>
             </div>
           </div>
-        </div>        
+        </div>
       </div>
     </div>
     <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert">
       You must provide an answer before submitting!
       <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      </div>
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
   </div>
 </template>
 
 <script>
-import TicketProxy from '@/proxies/TicketProxy'
-
-export default {
-  name: 'department_it',
-  data () {
-    return {
-      username: this.$store.getters.getUsername,
-      tickets: '',
-      showAlert: false
-    }
-  },
-  async created () {
-    try {
-      const response = await new TicketProxy().getSolverTickets()
-      console.log(response)
-      this.tickets = response
-    } catch (e) {
-      console.log(e)
-    }
-  },
-  methods: {
-    logout () {
-      this.$store.dispatch('logout')
-    }
-    /* ,
-    cardClicked: function (id, answer) {
-      if (answer) {
-        // Submit answer to API
-        API.answerSecondaryQuestion(id, answer)
-        // Delete ticket has it was already answered
-        this.tickets = this.tickets.filter(ticket => ticket.id !== id)
-        // Save the tickets to the file
-        Message.setTickets(this.tickets)
-      } else {
-        this.toggleAlert()
+  import TicketProxy from '@/proxies/TicketProxy'
+  
+  export default {
+    name: 'department_it',
+    data () {
+      return {
+        username: this.$store.getters.getUsername,
+        tickets: '',
+        showAlert: false
       }
     },
-    toggleAlert () {
-      this.showAlert = !this.showAlert
-    } */
+    async created () {
+      try {
+        const response = await new TicketProxy().getSolverTickets()
+        console.log(response)
+        this.tickets = response
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    methods: {
+      logout () {
+        this.$store.dispatch('logout')
+      }
+    }
   }
-}
 </script>
 
 <style>
+  
 </style>

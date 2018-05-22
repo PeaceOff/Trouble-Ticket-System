@@ -47,6 +47,12 @@ const routes = [
       import('@/components/Auth/Login')
   },
   {
+    path: '/secondaryTicket/:id',
+    name: 'secondaryTicket',
+    component: () =>
+      import('@/components/SecondaryTicket')
+  },
+  {
     path: '/',
     redirect: '/home'
   },
