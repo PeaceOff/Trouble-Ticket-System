@@ -1,7 +1,18 @@
 <template>
   <div class="container">
+    <div class="row-md-12">
+      <nav class="navbar navbar-expand navbar-light bg-light justify-content-between">
+        <div>
+          <a class="navbar-brand">Trouble Ticket System</a>
+        </div>
+        <div>
+          <span>Hello {{ username }}!</span>
+          <button class="btn btn-secondary btn-sm" @click="logout()">Logout</button>
+        </div>
+      </nav>
+    </div>
     <div class="row justify-content-md-center mt-3">
-      <h1>{{ dept.charAt(0).toUpperCase() + dept.slice(1).toLowerCase() }} department</h1>
+      <h1>IT Department</h1>
     </div>
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
@@ -28,22 +39,25 @@
 
 <script>
 import Message from '../logic/messageQueue'
-import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
+import API from '../logic/proxy'
 
 export default {
-  name: 'department',
+  name: 'department_it',
   data () {
     return {
-      dept: Message.dept,
+      username: this.$store.getters.getUsername,
       tickets: Message.tickets,
       showAlert: false
     }
   },
   methods: {
-    cardClicked: async function (id, answer) {
+    logout () {
+      this.$store.dispatch('logout')
+    },
+    cardClicked: function (id, answer) {
       if (answer) {
         // Submit answer to API
-        await new SecondaryTicketProxy().update(id, answer)
+        API.answerSecondaryQuestion(id, answer)
         // Delete ticket has it was already answered
         this.tickets = this.tickets.filter(ticket => ticket.id !== id)
         // Save the tickets to the file

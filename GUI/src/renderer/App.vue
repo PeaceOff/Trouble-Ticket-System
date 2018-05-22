@@ -1,17 +1,12 @@
 <template>
   <div id="app">
-    <department></department>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import Department from '@/components/Department'
-
   export default {
-    name: 'gui',
-    components: {
-      Department
-    }
+    name: 'gui'
   }
 </script>
 

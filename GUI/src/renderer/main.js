@@ -1,14 +1,20 @@
 import Vue from 'vue'
-import axios from 'axios'
+import { router } from './router'
+import store from './store'
 
 import App from './App'
+import './config/axios'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
+
+// Check if user is logged in
+store.dispatch('check')
 
 /* eslint-disable no-new */
 new Vue({
+  router,
+  store,
   components: { App },
   template: '<App/>'
 }).$mount('#app')
