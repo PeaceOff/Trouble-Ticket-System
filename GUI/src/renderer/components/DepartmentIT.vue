@@ -38,22 +38,31 @@
 </template>
 
 <script>
-import Message from '../logic/messageQueue'
-import API from '../logic/proxy'
+import TicketProxy from '@/proxies/TicketProxy'
 
 export default {
   name: 'department_it',
   data () {
     return {
       username: this.$store.getters.getUsername,
-      tickets: Message.tickets,
+      tickets: '',
       showAlert: false
+    }
+  },
+  async created () {
+    try {
+      const response = await new TicketProxy().getUnassignedTickets()
+      console.log(response)
+      this.tickets = response
+    } catch (e) {
+      console.log(e)
     }
   },
   methods: {
     logout () {
       this.$store.dispatch('logout')
-    },
+    }
+    /* ,
     cardClicked: function (id, answer) {
       if (answer) {
         // Submit answer to API
@@ -68,7 +77,7 @@ export default {
     },
     toggleAlert () {
       this.showAlert = !this.showAlert
-    }
+    } */
   }
 }
 </script>

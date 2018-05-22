@@ -26,9 +26,9 @@ export default {
       this.$store.dispatch('login', {
         username: this.username,
         password: this.password
-      }).then(() => {
-        console.log('Fez o dispatch com sucesso')
       }).catch((err) => {
+        // TODO mostrar erros ao user
+        console.log('Problem in sign in.')
         console.log(err)
       })
     }
