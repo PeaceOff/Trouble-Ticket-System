@@ -37,5 +37,6 @@ export default new VueRouter({
       path: '*',
       redirect: '/home'
     }
-  ]
+  ],
+  mode: 'history'
 })

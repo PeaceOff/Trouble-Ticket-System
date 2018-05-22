@@ -22,24 +22,8 @@ export default {
     }
   },
   methods: {
-    login () {
-      this.$http({
-        method: 'post',
-        url: 'http://localhost:51568/api/Account/Login',
-        data: {
-          username: this.username,
-          password: this.password
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Credentials': true,
-          'withCredentials': false
-        }
-      }).then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
+    async login () {
+      //
     }
   }
 }

@@ -90,6 +90,12 @@ namespace RestAPI
 
             app.UseAuthentication();
 
+            app.UseCors(builder => builder
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
+
             app.UseMvc();
 
             app.UseSwagger();
@@ -99,11 +105,7 @@ namespace RestAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trouble Ticket API");
             });
 
-            app.UseCors(builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
+           
 
             new DatabaseSeed(roleManager).InitDBAsync().Wait();   
         }
