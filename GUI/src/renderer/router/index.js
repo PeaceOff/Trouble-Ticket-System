@@ -27,10 +27,17 @@ const routes = [
       import('@/components/Department')
   },
   {
-    path: '/department_it',
-    name: 'department_it',
+    path: '/unassigned_tickets',
+    name: 'unassigned_tickets',
     component: () =>
-      import('@/components/DepartmentIT'),
+      import('@/components/DepartmentIT/UnassignedTickets'),
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: '/my_tickets',
+    name: 'my_tickets',
+    component: () =>
+      import('@/components/DepartmentIT/MyTickets'),
     beforeEnter: ifAuthenticated
   },
   {

@@ -21,6 +21,18 @@ class TicketProxy extends Proxy {
   getUnassignedTickets () {
     return this.submit('get', `${this.endpoint}/UnassignedTickets`)
   }
+
+  /**
+   * Method used to get all tickets assigned to the solver.
+   *
+   * @param {String} email The email.
+   * @param {String} password The password.
+   *
+   * @returns {Promise} The result in a promise.
+   */
+  getSolverTickets () {
+    return this.submit('get', `${this.endpoint}/SolverTickets`)
+  }
 }
 
 export default TicketProxy

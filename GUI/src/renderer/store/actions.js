@@ -16,7 +16,7 @@ export const login = async ({ commit }, data) => {
     commit(LOGIN_SUCCESS, response)
 
     Vue.router.push({
-      name: 'department_it'
+      name: 'unassigned_tickets'
     })
 
     return { success: true }

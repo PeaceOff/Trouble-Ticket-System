@@ -14,6 +14,14 @@
     <div class="row justify-content-md-center mt-3">
       <h1>IT Department</h1>
     </div>
+    <div class="row justify-content-md-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination pagination-lg">
+                <li class="page-item disabled"><a class="page-link" tabindex="-1">Unassigned Tickets</a></li>
+                <li class="page-item"><a class="page-link"><router-link to="my_tickets">My Tickets</router-link></a></li>
+            </ul>
+        </nav>
+    </div>
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
         <div class="card-body">
