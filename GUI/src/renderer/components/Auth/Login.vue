@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+  <div class="row">
+    <div class="col align-self-center">
+        <router-link to='home'><button type="button" class="btn btn-secondary">Home</button></router-link>
+    </div>
+  </div>
     <form class="login mt-4" @submit.prevent="login">
       <h1>Sign in</h1>
       <input class="form-control mt-4" required v-model="username" 
