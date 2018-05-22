@@ -109,6 +109,46 @@ namespace RestAPI.Controllers
             return NoContent();
         }
 
+        [HttpPut("AssignTicket/{id}")]
+        [Authorize]
+        public async Task<IActionResult> AssignTicket([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            ticket.SolverId = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            ticket.State = "Assigned";
+
+            _context.Entry(ticket).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TicketExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> PostTicket([FromBody] Ticket ticket)
