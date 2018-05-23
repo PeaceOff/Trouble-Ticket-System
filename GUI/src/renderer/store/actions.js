@@ -26,7 +26,6 @@ export const login = async ({ commit }, data) => {
 }
 
 export const logout = ({ commit, state }) => {
-  localStorage.removeItem('token')
   commit(LOGOUT)
   Vue.router.push({
     name: 'home'

@@ -1,4 +1,5 @@
 export default {
-  isLoggedIn: !!localStorage.getItem('token'),
+  isLoggedIn: false,
+  token: null,
   username: null
 }
