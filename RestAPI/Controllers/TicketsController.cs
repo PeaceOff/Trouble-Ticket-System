@@ -23,13 +23,6 @@ namespace RestAPI.Controllers
             _context = context;
         }
 
-        [HttpGet("AssignedUnsolved")]
-        [Authorize]
-        public IEnumerable<Ticket> GetAssignedUnsolved()
-        {
-            return _context.Ticket.Where(t => t.State == "Assigned" || t.State == "WaitingForAnswers").ToList();
-        }
-
         [HttpGet]
         [Authorize]
         public IEnumerable<Ticket> GetTicket()
@@ -37,11 +30,18 @@ namespace RestAPI.Controllers
             return _context.Ticket;
         }
 
+        [HttpGet("AssignedUnsolved")]
+        [Authorize]
+        public IEnumerable<Ticket> GetAssignedUnsolved()
+        {
+            return _context.Ticket.Include(t => t.Solver).Include(t => t.Author).Where(t => t.State == "Assigned" || t.State == "WaitingForAnswers").ToList();
+        }
+
         [HttpGet("UnassignedTickets")]
         [Authorize]
         public IEnumerable<Ticket> GetUnassignedTickets()
         {
-            return _context.Ticket.Where(t => t.State == "Unassigned").ToList();
+            return _context.Ticket.Include(t => t.Solver).Include(t => t.Author).Where(t => t.State == "Unassigned").ToList();
         }
 
         [HttpGet("WorkerTickets")]
@@ -50,7 +50,7 @@ namespace RestAPI.Controllers
         {
             string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            return _context.Ticket.Where(t => t.AuthorId == id).ToList();
+            return _context.Ticket.Include(t => t.Solver).Include(t => t.Author).Where(t => t.AuthorId == id).ToList();
         }
 
         [HttpGet("SolverTickets")]
@@ -59,7 +59,7 @@ namespace RestAPI.Controllers
         {
             string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
             
-            return _context.Ticket.Where(t => t.SolverId == id).ToList();
+            return _context.Ticket.Include(t => t.Solver).Include(t => t.Author).Where(t => t.SolverId == id).ToList();
         }
 
         [HttpGet("{id}")]

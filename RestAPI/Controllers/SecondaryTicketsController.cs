@@ -103,7 +103,13 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            secondaryTicket.CreatedAt = DateTime.Now;
             _context.SecondaryTicket.Add(secondaryTicket);
+
+            Ticket ticket = _context.Ticket.Single(t => t.Id == secondaryTicket.TicketId);
+            ticket.State = "WaitingForAnswers";
+            _context.Entry(ticket).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
             MessageQueue.SendMessageToDepartment(secondaryTicket.Id.ToString(), secondaryTicket.Title, secondaryTicket.Description);
