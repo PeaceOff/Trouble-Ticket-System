@@ -27,13 +27,13 @@ namespace RestAPI.Controllers
         [HttpGet]
         public IEnumerable<SecondaryTicket> GetSecondaryTicket()
         {
-            return _context.SecondaryTicket;
+            return _context.SecondaryTicket.Include(st => st.Ticket);
         }
 
         [HttpGet("UnassignedSecondaryTickets")]
         public IEnumerable<SecondaryTicket> GetUnassignedSecondaryTickets()
         {
-            return _context.SecondaryTicket.Where(st => st.Answer == null).ToList();
+            return _context.SecondaryTicket.Include(st => st.Ticket).Where(st => st.Answer == null).ToList();
         }
 
         [HttpGet("SolverUnsolvedSecondaryTickets")]
@@ -41,7 +41,7 @@ namespace RestAPI.Controllers
         {
             string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            return _context.SecondaryTicket.Where(st => st.Ticket.SolverId == id && st.Ticket.State != "Solved").ToList();
+            return _context.SecondaryTicket.Include(st => st.Ticket).Where(st => st.Ticket.SolverId == id && st.Ticket.State != "Solved").ToList();
         }
 
         [HttpGet("{id}")]
