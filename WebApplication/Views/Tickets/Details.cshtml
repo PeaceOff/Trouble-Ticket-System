@@ -5,55 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Ticket Details</h2>
-
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Answer)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Answer)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.State)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Author.Id)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Solver)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Solver.Id)
-        </dd>
-    </dl>
+<div class="container">
+    <div class="row">
+        <h2>Ticket Details</h2>
+        <hr />
+    </div>
+    <div class="row">
+        <h3><b>Title:</b></h3>
+        @Html.DisplayFor(model => model.Title)
+    </div>
+    <div class="row">
+        <h3><b>Description:</b></h3>
+        <p>@Html.DisplayFor(model => model.Title)</p>
+    </div>
+    <div class="row">
+        <h3><b>Answer:</b></h3>
+        <p>@Html.DisplayFor(model => model.Answer)</p>
+    </div>
+    <div class="row">
+        <br />
+        <h5><b>State:</b> @Html.DisplayTextFor(model => model.State)</h5>
+        <h5><b>Solver:</b> @Html.DisplayTextFor(model => model.Solver)</h5>
+        <h5><b>Created at:</b> @Html.DisplayTextFor(model => model.CreatedAt)</h5>
+    </div>
 </div>
+<br />
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

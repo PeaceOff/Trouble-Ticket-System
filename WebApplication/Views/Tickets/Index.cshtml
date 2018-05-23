@@ -17,23 +17,11 @@
                     @Html.DisplayNameFor(model => model.Title)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Answer)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.State)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CreatedAt)
                 </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Solver)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -44,22 +32,10 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Answer)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.State)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Solver.Id)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a>

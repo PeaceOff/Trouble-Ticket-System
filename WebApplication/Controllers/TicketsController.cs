@@ -19,6 +19,12 @@ namespace WebApplication.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
+            // Only workers can use this page
+            if (RestService.Token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             HttpClient client = RestService.GetClient();
             HttpResponseMessage response = await client.GetAsync("api/Tickets/");
 
@@ -27,6 +33,7 @@ namespace WebApplication.Controllers
                 string content = await response.Content.ReadAsStringAsync();
                 IEnumerable<Ticket> tickets = JsonConvert.DeserializeObject<IEnumerable<Ticket>>(content);
 
+                tickets = tickets.OrderBy(t => t.CreatedAt);
                 return View(tickets);
             }
             else
@@ -38,6 +45,12 @@ namespace WebApplication.Controllers
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            // Only workers can use this page
+            if (RestService.Token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -62,7 +75,12 @@ namespace WebApplication.Controllers
         // GET: Tickets/Create
         public IActionResult Create()
         {
-            ViewData["Username"] = RestService.Username;
+            // Only workers can use this page
+            if (RestService.Token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -73,7 +91,6 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description")] Ticket ticket)
         {
-            
             if (ModelState.IsValid)
             {
                 HttpClient client = RestService.GetClient();
