@@ -71,7 +71,7 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var ticket = await _context.Ticket.SingleOrDefaultAsync(m => m.Id == id);
+            var ticket = await _context.Ticket.Include(t => t.Solver).Include(t => t.Author).SingleOrDefaultAsync(m => m.Id == id);
 
             if (ticket == null)
             {
