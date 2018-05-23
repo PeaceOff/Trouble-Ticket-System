@@ -2,7 +2,7 @@ import Proxy from './Proxy'
 
 class SecondaryTicketProxy extends Proxy {
   /**
-   * The constructor for the AuthProxy.
+   * The constructor for the SecondaryTicket.
    *
    * @param {Object} parameters The query parameters.
    */

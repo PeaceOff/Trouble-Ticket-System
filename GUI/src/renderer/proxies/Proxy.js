@@ -88,7 +88,7 @@ class BaseProxy {
           if (response) {
             reject(response.data)
           } else {
-            console.log('Deu erro')
+            console.log('An error occured with your request.')
           }
         })
     })

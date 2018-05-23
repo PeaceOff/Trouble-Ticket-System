@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import SecondaryTicketProxy from '@/proxies/TicketProxy'
+import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
 
 export default {
   name: 'secondaryTicket',
@@ -55,13 +55,10 @@ export default {
           title: this.secondaryTicketTitle,
           description: this.secondaryTicketDescription
         }
-        console.log('enviar com:')
-        console.log(data)
         try {
           await new SecondaryTicketProxy().create(data)
-          console.log('criado o secondary ticket')
         } catch (e) {
-          console.log(e)
+          this.toggleError()
         }
       } else {
         this.toggleAlert()

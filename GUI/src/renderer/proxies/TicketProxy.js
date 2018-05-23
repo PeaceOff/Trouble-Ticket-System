@@ -2,7 +2,7 @@ import Proxy from './Proxy'
 
 class TicketProxy extends Proxy {
   /**
-   * The constructor for the AuthProxy.
+   * The constructor for the TicketProxy.
    *
    * @param {Object} parameters The query parameters.
    */
