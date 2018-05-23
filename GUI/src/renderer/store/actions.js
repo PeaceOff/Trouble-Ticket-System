@@ -15,10 +15,6 @@ export const login = async ({ commit }, data) => {
     const response = await new AuthProxy().login(data)
     commit(LOGIN_SUCCESS, response)
 
-    Vue.router.push({
-      name: 'unassigned_tickets'
-    })
-
     return { success: true }
   } catch (e) {
     throw e

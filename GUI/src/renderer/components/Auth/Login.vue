@@ -10,7 +10,7 @@
       <input class="form-control mt-4" required v-model="password" 
         type="password" placeholder="Password"/>
       <div class="alert alert-danger text-center col-md-12 mt-3 text-sm" role="alert" v-if="showError" v-on:click="toggleError()">
-      Username and/or Password incorrect!
+      {{ error }}
       </div>
       <hr/>
       <button class="btn btn-primary" type="submit">Login</button>
@@ -19,13 +19,16 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'login',
   data () {
     return {
       username: '',
       password: '',
-      showError: false
+      showError: false,
+      error: 'Username and/or password incorrect!'
     }
   },
   methods: {
@@ -33,7 +36,17 @@ export default {
       this.$store.dispatch('login', {
         username: this.username,
         password: this.password
+      }).then(() => {
+        if (this.$store.getters.getRole === 'Solver') {
+          Vue.router.push({
+            name: 'unassigned_tickets'
+          })
+        } else {
+          this.error = 'You do not have permission to access this department.'
+          this.toggleError()
+        }
       }).catch((err) => {
+        this.error = 'Username and/or password incorrect!'
         this.toggleError()
         console.log('Problem in sign in.')
         console.log(err)

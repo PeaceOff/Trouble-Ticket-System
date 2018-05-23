@@ -52,16 +52,22 @@ export default {
     }
   },
   async created () {
-    try {
-      const response = await new TicketProxy().getUnassignedTickets()
-      this.tickets = response
-    } catch (e) {
-      console.log(e)
-    }
+    this.getUnassignedTickets()
+
+    // Pooling unassigned tickets
+    setInterval(this.getUnassignedTickets, 2000)
   },
   methods: {
     logout () {
       this.$store.dispatch('logout')
+    },
+    async getUnassignedTickets () {
+      try {
+        const response = await new TicketProxy().getUnassignedTickets()
+        this.tickets = response
+      } catch (e) {
+        console.log(e)
+      }
     },
     async assignTicket (id) {
       try {
