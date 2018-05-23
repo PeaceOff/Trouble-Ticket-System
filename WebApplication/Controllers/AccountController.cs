@@ -43,6 +43,12 @@ namespace WebApplication.Controllers
 
                     RestService.StoreLoginResponse(token);
 
+                    if(RestService.Role != "Worker")
+                    {
+                        ModelState.AddModelError(string.Empty, "You do not have permission to access this page.");
+                        return View(model);
+                    }
+
                     return RedirectToAction("Index", "Tickets");
                 }
                 else
