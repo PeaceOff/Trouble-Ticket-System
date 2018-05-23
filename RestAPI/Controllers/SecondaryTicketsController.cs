@@ -95,6 +95,42 @@ namespace RestAPI.Controllers
             return NoContent();
         }
 
+        [HttpPut]
+        public async Task<IActionResult> AnswerSecondaryTicket([FromRoute] int id, [FromBody] string answer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var secondaryTicket = await _context.SecondaryTicket.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (secondaryTicket == null)
+            {
+                return NotFound();
+            }
+
+            secondaryTicket.Answer = answer;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SecondaryTicketExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostSecondaryTicket([FromBody] SecondaryTicket secondaryTicket)
         {
