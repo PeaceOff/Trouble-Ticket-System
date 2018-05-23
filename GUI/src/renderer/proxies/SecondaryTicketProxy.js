@@ -19,7 +19,7 @@ class SecondaryTicketProxy extends Proxy {
    * @returns {Promise} The result in a promise.
    */
   getSolverSecondaryTickets () {
-    return this.submit('get', `${this.endpoint}/SolverSecondaryTickets`)
+    return this.submit('get', `${this.endpoint}/SolverUnsolvedSecondaryTickets`)
   }
 }
 
