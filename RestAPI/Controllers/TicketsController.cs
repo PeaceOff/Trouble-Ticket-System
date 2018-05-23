@@ -110,7 +110,15 @@ namespace RestAPI.Controllers
 
             var author = _context.Users.Find(ticket.AuthorId);
 
-            _emailSender.SendEmail(author.Email, "Your ticket is now solved!", answer);
+            string emailBody =
+                $"The ticket with the id {ticket.Id} is now solved. " +
+                $"The answer from our specialist solver was: {answer}. " +
+                $"If you have any further questions please submit a new question! ";
+
+            _emailSender.SendEmail
+                (author.Email,
+                $"Ticket number {ticket.Id} is now solved!",
+                emailBody);
 
             return NoContent();
         }
