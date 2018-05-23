@@ -32,9 +32,9 @@ namespace RestAPI.Services
         }
 
         private class DeptMessage {
-            string id;
-            string title;
-            string description;
+            public string id { get; set; }
+            public string title { get; set; }
+            public string description { get; set; }
 
             public DeptMessage(string i, string t, string d) {
                 id = i;
