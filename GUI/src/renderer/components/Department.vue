@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col align-self-center">
-        <router-link to='home'><button type="button" class="btn btn-secondary">Home</button></router-link>
-      </div>
-    </div>
+    <router-link to='home'>Go Back</router-link>
     <div class="row justify-content-md-center mt-3">
       <h1>{{ dept.charAt(0).toUpperCase() + dept.slice(1).toLowerCase() }} department</h1>
     </div>
@@ -22,23 +18,14 @@
         </div>
       </div>
     </div>
-    <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert">
+    <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert" v-on:click="toggleAlert()">
       You must provide an answer before submitting!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
-    <div class="alert alert-danger fixed-bottom mx-5 text-center" role="alert" v-if="showError">
+    <div class="alert alert-danger fixed-bottom mx-5 text-center" role="alert" v-if="showError" v-on:click="toggleError()">
       An error occured while submetting the request. Please try again later!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleError()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
-    <div class="alert alert-success fixed-bottom mx-5 text-center" role="alert" v-if="showSuccess">
+    <div class="alert alert-success fixed-bottom mx-5 text-center" role="alert" v-if="showSuccess" v-on:click="toggleSuccess()">
       Answer submitted!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleSuccess()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
   </div>
 </template>

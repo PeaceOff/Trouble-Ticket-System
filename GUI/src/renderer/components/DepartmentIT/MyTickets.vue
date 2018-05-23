@@ -45,13 +45,15 @@
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
         <div class="card-body">
-          <h5 class="card-title">{{ ticket.title }}</h5>
+          <div class="row">
+            <h5 class="card-title col-md-8">{{ ticket.title }}</h5>
+            <router-link class="col-md-4 text-right" :to="{ name: 'secondaryTicket', params: { id: ticket.id }}">Create secondary ticket</router-link>
+          </div>
           <p class="card-text">{{ ticket.description }}</p>
           <div class="input-group mb-3">
             <input type="text" class="form-control" v-model="ticket.answer" placeholder="Answer" aria-describedby="basic-addon2">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="button" v-on:click="answerTicket(ticket.id,ticket.answer)">Submit</button>
-              <router-link :to="{ name: 'secondaryTicket', params: { id: ticket.id }}">Create secondary ticket</router-link>
             </div>
           </div>
         </div>

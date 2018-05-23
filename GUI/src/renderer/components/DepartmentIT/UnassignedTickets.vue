@@ -27,13 +27,11 @@
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
         <div class="card-body">
-          <h5 class="card-title">{{ ticket.title }}</h5>
-          <p class="card-text">{{ ticket.description }}</p>
-          <div class="input-group mb-3">
-            <div class="input-group-append">
-              <button class="btn btn-success" type="button" v-on:click="assignTicket(ticket.id)">Assign</button>
-            </div>
+          <div class="row">
+          <h5 class="card-title col-md-9">{{ ticket.title }}</h5>
+          <button class="btn btn-primary col-md-3" type="button" v-on:click="assignTicket(ticket.id)">Assign</button>
           </div>
+          <p class="card-text">{{ ticket.description }}</p>
         </div>        
       </div>
     </div>

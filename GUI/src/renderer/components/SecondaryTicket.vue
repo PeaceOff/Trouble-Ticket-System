@@ -1,10 +1,11 @@
 <template>
-  <div class="container">
+  <div class="container col-md-6 col-offset-3">
+    <a href="#" v-on:click="goBack()">Go Back</a>
     <div class="row justify-content-md-center mt-3">
       <h1>Create secondary ticket</h1>
     </div>
-    <div class="row">
-      <form @submit.prevent="submit">
+    <div class="row mt-5">
+      <form @submit.prevent="submit" class="col-md-10 offset-md-1">
         <div class="form-group">
           <input type="text" class="form-control" v-model="secondaryTicketTitle" placeholder="Title">
           <small id="emailHelp" class="form-text text-muted">Keep it short and simple.</small>
@@ -15,17 +16,11 @@
         <button type="submit" class="btn btn-primary">Submit ticket</button>
       </form>
     </div>
-    <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert">
+    <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert" v-on:click="toggleAlert()">
       You must provide an answer before submitting!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
-    <div class="alert alert-danger fixed-bottom mx-5 text-center" role="alert" v-if="showError">
+    <div class="alert alert-danger fixed-bottom mx-5 text-center" role="alert" v-if="showError" v-on:click="toggleError()">
       An error occured with your request. Please try again later!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleError()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
   </div>
 </template>
@@ -48,9 +43,6 @@ export default {
   methods: {
     async submit () {
       if (this.secondaryTicketTitle && this.secondaryTicketDescription) {
-        this.secondaryTicketTitle = this.appendQuestionMark(this.secondaryTicketTitle)
-        this.secondaryTicketDescription = this.appendQuestionMark(this.secondaryTicketDescription)
-
         const data = {
           ticketId: this.ticketId,
           title: this.secondaryTicketTitle,
@@ -65,6 +57,8 @@ export default {
         } catch (e) {
           this.toggleError()
         }
+
+        // Voltar para o MyTickets.vue || SecondaryTicketList
       } else {
         this.toggleAlert()
       }
@@ -75,8 +69,8 @@ export default {
     toggleError () {
       this.showError = !this.showError
     },
-    appendQuestionMark (text) {
-      return (text[text.length - 1] !== '?') ? text + '?' : text
+    goBack () {
+      Vue.router.go(-1)
     }
   }
 }

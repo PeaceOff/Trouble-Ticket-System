@@ -1,18 +1,19 @@
 <template>
   <div class="container">
-  <div class="row">
-    <div class="col align-self-center">
-        <router-link to='home'><button type="button" class="btn btn-secondary">Home</button></router-link>
-    </div>
-  </div>
-    <form class="login mt-4" @submit.prevent="login">
+  <router-link to='home'>Go Back</router-link>
+    <div class="row justify-content-md-center mt-3">
       <h1>Sign in</h1>
+    </div>
+    <form class="login mt-4 col-md-6 offset-md-3" @submit.prevent="login">
       <input class="form-control mt-4" required v-model="username" 
         type="text" placeholder="Username"/>
       <input class="form-control mt-4" required v-model="password" 
         type="password" placeholder="Password"/>
+      <div class="alert alert-danger text-center col-md-12 mt-3 text-sm" role="alert" v-if="showError" v-on:click="toggleError()">
+      Username and/or Password incorrect!
+      </div>
       <hr/>
-      <button type="submit">Login</button>
+      <button class="btn btn-primary" type="submit">Login</button>
    </form>
   </div>
 </template>
@@ -23,7 +24,8 @@ export default {
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      showError: false
     }
   },
   methods: {
@@ -32,10 +34,13 @@ export default {
         username: this.username,
         password: this.password
       }).catch((err) => {
-        // TODO mostrar erros ao user
+        this.toggleError()
         console.log('Problem in sign in.')
         console.log(err)
       })
+    },
+    toggleError () {
+      this.showError = !this.showError
     }
   }
 }

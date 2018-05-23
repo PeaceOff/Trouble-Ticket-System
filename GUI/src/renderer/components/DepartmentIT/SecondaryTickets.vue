@@ -44,13 +44,16 @@
     </div>
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
-        <div class="card-body">
+        <div class="row card-body">
+          <div class="col-md-6">
           <h5 class="card-title">{{ ticket.title }}</h5>
           <p class="card-text">{{ ticket.description }}</p>
-          <br>
+          </div>
+          <div class="col-md-6">
           <h6 class="card-text">Department Answer:</h6>
           <p class="card-text">{{ ticket.answer }}</p>
           <p class="card-text" v-if='ticket.answer == null'>No answer yet.</p>
+          </div>
         </div>
       </div>
     </div>
