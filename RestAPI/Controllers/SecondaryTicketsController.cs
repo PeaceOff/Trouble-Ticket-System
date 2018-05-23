@@ -35,12 +35,12 @@ namespace RestAPI.Controllers
             return _context.SecondaryTicket.Where(st => st.Answer == null).ToList();
         }
 
-        [HttpGet("SolverSecondaryTickets")]
-        public IEnumerable<SecondaryTicket> GetSolverSecondaryTickets()
+        [HttpGet("SolverUnsolvedSecondaryTickets")]
+        public IEnumerable<SecondaryTicket> GetSolverUnsolvedSecondaryTickets()
         {
             string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            return _context.SecondaryTicket.Where(st => st.Ticket.SolverId == id).ToList();
+            return _context.SecondaryTicket.Where(st => st.Ticket.SolverId == id && st.Ticket.State != "Solved").ToList();
         }
 
         [HttpGet("{id}")]
