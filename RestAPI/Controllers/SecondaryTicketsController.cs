@@ -63,40 +63,6 @@ namespace RestAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSecondaryTicket([FromRoute] int id, [FromBody] SecondaryTicket secondaryTicket)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != secondaryTicket.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(secondaryTicket).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SecondaryTicketExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        [HttpPut]
         public async Task<IActionResult> AnswerSecondaryTicket([FromRoute] int id, [FromBody] Answer answer)
         {
             if (!ModelState.IsValid)

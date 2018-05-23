@@ -6,8 +6,7 @@ const endpoint = process.env.API_ENDPOINT || 'http://localhost:63770'
 async function answerSecondaryQuestion (id, answer) {
   try {
     var response = await _axios.put(`${endpoint}/api/SecondaryTickets/${id}`, {
-      id: id,
-      answer: answer
+      text: answer
     })
     console.log(response)
     return true

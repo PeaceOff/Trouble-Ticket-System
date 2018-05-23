@@ -32,7 +32,7 @@
 
 <script>
   import Message from '../logic/messageQueue'
-  import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
+  import _Proxy from '../logic/proxy'
   
   export default {
     name: 'department',
@@ -49,7 +49,7 @@
       async cardClicked (id, answer) {
         if (answer) {
           // Submit answer to API
-          if (await new SecondaryTicketProxy().update(id, { text: answer })) {
+          if (await _Proxy.answerSecondaryQuestion(id, answer)) {
             // Show feedback to the user
             this.toggleSuccess()
             // Delete ticket has it was already answered
