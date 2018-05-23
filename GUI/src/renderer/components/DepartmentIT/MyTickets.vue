@@ -26,6 +26,24 @@
         </ul>
       </nav>
     </div>
+    <div class="alert alert-success fixed mx-5 text-center" role="alert" v-if="showSuccess">
+      Answer submitted!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleSuccess()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-warning fixed mx-5 text-center" role="alert" v-if="showAlert">
+      You must provide an answer before submitting!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger fixed mx-5 text-center" role="alert" v-if="showError">
+      An error occured with your request. Please try again later!
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleError()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">
         <div class="card-body">
@@ -34,18 +52,12 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" v-model="ticket.answer" placeholder="Answer" aria-describedby="basic-addon2">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" v-on:click="cardClicked(ticket.id,ticket.answer)">Submit</button>
+              <button class="btn btn-outline-secondary" type="button" v-on:click="answerTicket(ticket.id,ticket.answer)">Submit</button>
               <router-link :to="{ name: 'secondaryTicket', params: { id: ticket.id }}">Create secondary ticket</router-link>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert">
-      You must provide an answer before submitting!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
   </div>
 </template>
@@ -59,21 +71,44 @@
       return {
         username: this.$store.getters.getUsername,
         tickets: '',
-        showAlert: false
+        showAlert: false,
+        showError: false,
+        showSuccess: false
       }
     },
     async created () {
       try {
         const response = await new TicketProxy().getSolverTickets()
-        console.log(response)
         this.tickets = response
       } catch (e) {
         console.log(e)
       }
     },
     methods: {
+      async answerTicket (id, answer) {
+        if (answer !== '') {
+          try {
+            await new TicketProxy().update(id, { id, answer })
+            this.toggleSuccess()
+            this.tickets = this.tickets.filter(ticket => ticket.id !== id)
+          } catch (e) {
+            this.toggleError()
+          }
+        } else {
+          this.toggleAlert()
+        }
+      },
       logout () {
         this.$store.dispatch('logout')
+      },
+      toggleAlert () {
+        this.showAlert = !this.showAlert
+      },
+      toggleError () {
+        this.showError = !this.showError
+      },
+      toggleSuccess () {
+        this.showSuccess = !this.showSuccess
       }
     }
   }

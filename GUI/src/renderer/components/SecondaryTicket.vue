@@ -4,7 +4,7 @@
       <h1>Create secondary ticket</h1>
     </div>
     <div class="row">
-      <form>
+      <form @submit.prevent="submit">
         <div class="form-group">
           <input type="text" class="form-control" v-model="secondaryTicketTitle" placeholder="Title">
           <small id="emailHelp" class="form-text text-muted">Keep it short and simple.</small>
@@ -12,7 +12,7 @@
         <div class="form-group">
           <input type="text" class="form-control" v-model="secondaryTicketDescription" placeholder="Description">
         </div>
-        <button type="submit" class="btn btn-primary" v-on:click="submit()">Submit ticket</button>
+        <button type="submit" class="btn btn-primary">Submit ticket</button>
       </form>
     </div>
     <div class="alert alert-warning fixed-bottom mx-5 text-center" role="alert" v-if="showAlert">
@@ -31,38 +31,53 @@
 </template>
 
 <script>
-  export default {
-    name: 'secondaryTicket',
-    data () {
-      return {
-        ticketId: this.$route.params.id,
-        secondaryTicketTitle: '',
-        secondaryTicketDescription: '',
-        showAlert: false,
-        showError: false
+import SecondaryTicketProxy from '@/proxies/TicketProxy'
+
+export default {
+  name: 'secondaryTicket',
+  data () {
+    return {
+      ticketId: this.$route.params.id,
+      secondaryTicketTitle: '',
+      secondaryTicketDescription: '',
+      showAlert: false,
+      showError: false
+    }
+  },
+  methods: {
+    async submit () {
+      if (this.secondaryTicketTitle && this.secondaryTicketDescription) {
+        this.secondaryTicketTitle = this.appendQuestionMark(this.secondaryTicketTitle)
+        this.secondaryTicketDescription = this.appendQuestionMark(this.secondaryTicketDescription)
+
+        const data = {
+          ticketId: this.ticketId,
+          title: this.secondaryTicketTitle,
+          description: this.secondaryTicketDescription
+        }
+        console.log('enviar com:')
+        console.log(data)
+        try {
+          await new SecondaryTicketProxy().create(data)
+          console.log('criado o secondary ticket')
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        this.toggleAlert()
       }
     },
-    methods: {
-      async submit () {
-        if (this.secondaryTicketTitle && this.secondaryTicketDescription) {
-          this.secondaryTicketTitle = this.appendQuestionMark(this.secondaryTicketTitle)
-          this.secondaryTicketDescription = this.appendQuestionMark(this.secondaryTicketDescription)
-          // TODO: Criar o secondory ticket na API
-        } else {
-          this.toggleAlert()
-        }
-      },
-      toggleAlert () {
-        this.showAlert = !this.showAlert
-      },
-      toggleError () {
-        this.showError = !this.showError
-      },
-      appendQuestionMark (text) {
-        return (text[text.length - 1] !== '?') ? text + '?' : text
-      }
+    toggleAlert () {
+      this.showAlert = !this.showAlert
+    },
+    toggleError () {
+      this.showError = !this.showError
+    },
+    appendQuestionMark (text) {
+      return (text[text.length - 1] !== '?') ? text + '?' : text
     }
   }
+}
 </script>
 
 <style>

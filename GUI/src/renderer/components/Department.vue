@@ -64,7 +64,7 @@
           // Submit answer to API
           if (await _Proxy.answerSecondaryQuestion(id, answer)) {
             // Show feedback to the user
-            this.toggleSuccess(); 
+            this.toggleSuccess()
             // Delete ticket has it was already answered
             this.tickets = this.tickets.filter(ticket => ticket.id !== id)
             // Save the tickets to the file

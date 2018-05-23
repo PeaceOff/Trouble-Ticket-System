@@ -83,28 +83,24 @@ namespace RestAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != ticket.Id)
+            if (ticket == null || ticket.Id != id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            var item = _context.Ticket.Find(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TicketExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            item.State = "Solved";
+            item.Answer = ticket.Answer;
+
+            _context.Entry(item).State = EntityState.Modified;          
+
+            _context.Ticket.Update(item);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
