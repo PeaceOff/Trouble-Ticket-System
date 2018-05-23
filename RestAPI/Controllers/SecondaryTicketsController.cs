@@ -143,7 +143,7 @@ namespace RestAPI.Controllers
             _context.SecondaryTicket.Add(secondaryTicket);
 
             Ticket ticket = _context.Ticket.Single(t => t.Id == secondaryTicket.TicketId);
-            ticket.State = "WaitingForAnswers";
+            ticket.State = "Waiting For Answers";
             _context.Entry(ticket).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
