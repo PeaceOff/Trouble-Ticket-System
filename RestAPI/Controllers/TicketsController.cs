@@ -23,6 +23,13 @@ namespace RestAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("AssignedUnsolved")]
+        [Authorize]
+        public IEnumerable<Ticket> GetAssignedUnsolved()
+        {
+            return _context.Ticket.Where(t => t.State == "Assigned" || t.State == "WaitingForAnswers").ToList();
+        }
+
         [HttpGet]
         [Authorize]
         public IEnumerable<Ticket> GetTicket()
