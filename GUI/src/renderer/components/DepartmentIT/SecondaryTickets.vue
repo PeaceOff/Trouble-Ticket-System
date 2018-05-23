@@ -61,6 +61,7 @@
 </template>
 
 <script>
+  import Message from '../../logic/messageQueue'
   import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
   
   export default {
@@ -78,9 +79,13 @@
       try {
         const response = await new SecondaryTicketProxy().getSolverSecondaryTickets()
         this.tickets = response
+        Message.openSolverMessageQueue(this.username, this.messageReceived)
       } catch (e) {
         console.log(e)
       }
+    },
+    beforeDestroy () {
+      Message.closeSolverMessageQueue()
     },
     methods: {
       logout () {
@@ -94,6 +99,14 @@
       },
       toggleSuccess () {
         this.showSuccess = !this.showSuccess
+      },
+      messageReceived (msg) {
+        let obj = JSON.parse(msg.content.toString())
+        this.tickets.forEach(element => {
+          if (element.id === obj.id) {
+            element.answer = obj.answer
+          }
+        })
       }
     }
   }

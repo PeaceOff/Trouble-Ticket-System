@@ -95,6 +95,10 @@ namespace RestAPI.Controllers
                 }
             }
 
+            var ticket = await _context.Ticket.SingleOrDefaultAsync(t => t.Id == secondaryTicket.TicketId);
+            var solver = await _context.Users.SingleOrDefaultAsync(u => u.Id == ticket.SolverId);
+            MessageQueue.SendAnswerToSolver(solver.UserName, secondaryTicket.Id.ToString(), answer.Text);
+
             return Ok();
         }
 

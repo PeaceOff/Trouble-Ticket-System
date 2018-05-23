@@ -4,6 +4,8 @@ const jsonfile = require('jsonfile')
 const dept = process.env.DEPARTMENT_NAME || 'hello'
 const msgFile = `./${dept}.json`
 let tickets = []
+let solverConnection
+let solverChannel
 
 // Fetching stored data
 try {
@@ -52,8 +54,43 @@ function setTickets (t) {
   storeData()
 }
 
+function openSolverMessageQueue (solverName, receiverCallback) {
+  amqp.connect('amqp://localhost', function (err, conn) {
+    if (err) {
+      console.log(err)
+      return
+    }
+    solverConnection = conn
+    solverConnection.createChannel(function (err, ch) {
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      solverChannel = ch
+      solverChannel.assertQueue(solverName, {durable: false})
+      console.log(' [*] Waiting for messages in %s. To exit press CTRL+C', solverName)
+      solverChannel.consume(solverName, receiverCallback, {noAck: true})
+    })
+  })
+}
+
+function closeSolverMessageQueue () {
+  if (solverChannel) {
+    solverChannel.close()
+    solverChannel = null
+  }
+
+  if (solverConnection) {
+    solverConnection.close()
+    solverConnection = null
+  }
+}
+
 module.exports = {
   dept,
   tickets,
-  setTickets
+  setTickets,
+  openSolverMessageQueue,
+  closeSolverMessageQueue
 }
