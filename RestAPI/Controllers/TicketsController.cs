@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Entities;
+using RestAPI.Services;
 
 namespace RestAPI.Controllers
 {
@@ -17,10 +18,12 @@ namespace RestAPI.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly EmailSender _emailSender;
 
-        public TicketsController(ApplicationDbContext context)
+        public TicketsController(ApplicationDbContext context, EmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -83,31 +86,31 @@ namespace RestAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutTicket([FromRoute] int id, [FromBody] Ticket ticket)
+        public async Task<IActionResult> AnswerTicket([FromRoute] int id, [FromBody] string answer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (ticket == null || ticket.Id != id)
-            {
-                return BadRequest();
-            }
+            var ticket = _context.Ticket.Find(id);
 
-            var item = _context.Ticket.Find(id);
-            if (item == null)
+            if (ticket == null)
             {
                 return NotFound();
             }
 
-            item.State = "Solved";
-            item.Answer = ticket.Answer;
+            ticket.State = "Solved";
+            ticket.Answer = answer;
 
-            _context.Entry(item).State = EntityState.Modified;          
+            _context.Entry(ticket).State = EntityState.Modified;          
 
-            _context.Ticket.Update(item);
+            _context.Ticket.Update(ticket);
             await _context.SaveChangesAsync();
+
+            var author = _context.Users.Find(ticket.AuthorId);
+
+            _emailSender.SendEmail(author.Email, "Your ticket is now solved!", answer);
 
             return NoContent();
         }
