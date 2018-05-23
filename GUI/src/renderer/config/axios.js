@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Axios from 'axios'
+require('dotenv').config()
 
 Axios.defaults.headers.common.Accept = 'application/json'
-Axios.defaults.baseURL = process.env.API_ENDPOINT || 'http://localhost:51568'
+Axios.defaults.baseURL = process.env.API_ENDPOINT || 'http://localhost:63770'
 Axios.interceptors.response.use(
   response => response,
   (error) => {

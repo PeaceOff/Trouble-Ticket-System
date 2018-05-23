@@ -1,7 +1,7 @@
 require('dotenv').config()
 const axios = require('axios')
 
-const endpoint = process.env.API_ENDPOINT || 'http://localhost:51568'
+const endpoint = process.env.API_ENDPOINT || 'http://localhost:63770'
 
 async function answerSecondaryQuestion (id, answer) {
   try {
