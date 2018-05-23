@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
 using RestAPI.Entities;
+using RestAPI.Services;
 
 namespace RestAPI.Controllers
 {
@@ -17,10 +18,12 @@ namespace RestAPI.Controllers
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly EmailSender _emailSender;
 
-        public TicketsController(ApplicationDbContext context)
+        public TicketsController(ApplicationDbContext context, EmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -108,6 +111,10 @@ namespace RestAPI.Controllers
 
             _context.Ticket.Update(item);
             await _context.SaveChangesAsync();
+
+            var author = _context.Users.Find(item.AuthorId);
+
+            _emailSender.SendEmail(author.Email, "Your ticket is now solved!", ticket.Answer);
 
             return NoContent();
         }

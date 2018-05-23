@@ -32,6 +32,8 @@ namespace RestAPI
 
             services.AddTransient<JwtHelper>();
 
+            services.AddTransient<EmailSender>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
