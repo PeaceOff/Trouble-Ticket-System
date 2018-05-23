@@ -14,11 +14,13 @@
     <div class="row justify-content-md-center mt-3">
       <h1>IT Department</h1>
     </div>
+    <!-- Menu -->
     <div class="row justify-content-md-center mt-3">
         <nav aria-label="...">
             <ul class="pagination pagination-lg">
                 <li class="page-item disabled"><a class="page-link" tabindex="-1">Unassigned Tickets</a></li>
                 <li class="page-item"><a class="page-link"><router-link to="my_tickets">My Tickets</router-link></a></li>
+                <li class="page-item"><a class="page-link"><router-link to="my_secondary_tickets">My Secondary Tickets</router-link></a></li>
             </ul>
         </nav>
     </div>

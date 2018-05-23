@@ -9,6 +9,18 @@ class SecondaryTicketProxy extends Proxy {
   constructor (parameters = {}) {
     super('api/SecondaryTickets', parameters)
   }
+
+  /**
+   * Method used to get all secondary tickets created by the solver.
+   *
+   * @param {String} email The email.
+   * @param {String} password The password.
+   *
+   * @returns {Promise} The result in a promise.
+   */
+  getSolverSecondaryTickets () {
+    return this.submit('get', `${this.endpoint}/SolverSecondaryTickets`)
+  }
 }
 
 export default SecondaryTicketProxy

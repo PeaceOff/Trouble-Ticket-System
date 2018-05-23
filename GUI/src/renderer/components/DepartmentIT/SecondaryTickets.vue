@@ -19,8 +19,8 @@
       <nav aria-label="...">
         <ul class="pagination pagination-lg">
           <li class="page-item"><a class="page-link"><router-link to="unassigned_tickets">Unassigned Tickets</router-link></a></li>
-          <li class="page-item disabled"><a class="page-link" tabindex="-1">My Tickets</a></li>
-          <li class="page-item"><a class="page-link"><router-link to="my_secondary_tickets">My Secondary Tickets</router-link></a></li>
+          <li class="page-item"><a class="page-link"><router-link to="my_tickets">My Tickets</router-link></a></li>
+          <li class="page-item disabled"><a class="page-link" tabindex="-1">My Secondary Tickets</a></li>
         </ul>
       </nav>
     </div>
@@ -47,13 +47,10 @@
         <div class="card-body">
           <h5 class="card-title">{{ ticket.title }}</h5>
           <p class="card-text">{{ ticket.description }}</p>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" v-model="ticket.answer" placeholder="Answer" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" v-on:click="answerTicket(ticket.id,ticket.answer)">Submit</button>
-              <router-link :to="{ name: 'secondaryTicket', params: { id: ticket.id }}">Create secondary ticket</router-link>
-            </div>
-          </div>
+          <br>
+          <h6 class="card-text">Department Answer:</h6>
+          <p class="card-text">{{ ticket.answer }}</p>
+          <p class="card-text" v-if='ticket.answer == null'>No answer yet.</p>
         </div>
       </div>
     </div>
@@ -61,7 +58,7 @@
 </template>
 
 <script>
-  import TicketProxy from '@/proxies/TicketProxy'
+  import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
   
   export default {
     name: 'department_it',
@@ -76,26 +73,13 @@
     },
     async created () {
       try {
-        const response = await new TicketProxy().getSolverTickets()
+        const response = await new SecondaryTicketProxy().getSolverSecondaryTickets()
         this.tickets = response
       } catch (e) {
         console.log(e)
       }
     },
     methods: {
-      async answerTicket (id, answer) {
-        if (answer !== '') {
-          try {
-            await new TicketProxy().update(id, { id, answer })
-            this.toggleSuccess()
-            this.tickets = this.tickets.filter(ticket => ticket.id !== id)
-          } catch (e) {
-            this.toggleError()
-          }
-        } else {
-          this.toggleAlert()
-        }
-      },
       logout () {
         this.$store.dispatch('logout')
       },

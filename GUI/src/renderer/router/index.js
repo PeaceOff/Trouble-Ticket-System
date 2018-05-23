@@ -41,6 +41,13 @@ const routes = [
     beforeEnter: ifAuthenticated
   },
   {
+    path: '/my_secondary_tickets',
+    name: 'my_secondary_tickets',
+    component: () =>
+      import('@/components/DepartmentIT/SecondaryTickets'),
+    beforeEnter: ifAuthenticated
+  },
+  {
     path: '/login',
     name: 'login',
     component: () =>

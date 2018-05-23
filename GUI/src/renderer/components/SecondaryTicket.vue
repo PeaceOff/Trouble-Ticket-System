@@ -32,6 +32,7 @@
 
 <script>
 import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
+import Vue from 'vue'
 
 export default {
   name: 'secondaryTicket',
@@ -57,6 +58,10 @@ export default {
         }
         try {
           await new SecondaryTicketProxy().create(data)
+
+          Vue.router.push({
+            name: 'my_secondary_tickets'
+          })
         } catch (e) {
           this.toggleError()
         }

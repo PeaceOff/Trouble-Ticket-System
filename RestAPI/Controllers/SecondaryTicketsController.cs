@@ -108,7 +108,7 @@ namespace RestAPI.Controllers
 
             MessageQueue.SendMessageToDepartment(secondaryTicket.Id.ToString(), secondaryTicket.Title, secondaryTicket.Description);
 
-            return Ok(secondaryTicket);
+            return CreatedAtAction("GetSecondaryTicket", new { id = secondaryTicket.Id }, secondaryTicket);
         }
 
         [HttpDelete("{id}")]
