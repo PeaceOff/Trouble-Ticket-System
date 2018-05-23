@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebApplication.Models;
 using WebApplication.Services;
@@ -19,6 +16,12 @@ namespace WebApplication.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
+            // Only workers can use this page
+            if (RestService.Token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             HttpClient client = RestService.GetClient();
             HttpResponseMessage response = await client.GetAsync("api/Tickets/");
 
@@ -27,6 +30,7 @@ namespace WebApplication.Controllers
                 string content = await response.Content.ReadAsStringAsync();
                 IEnumerable<Ticket> tickets = JsonConvert.DeserializeObject<IEnumerable<Ticket>>(content);
 
+                tickets = tickets.OrderBy(t => t.CreatedAt);
                 return View(tickets);
             }
             else
@@ -36,29 +40,44 @@ namespace WebApplication.Controllers
         }
 
         // GET: Tickets/Details/5
-        /*public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
+            // Only workers can use this page
+            if (RestService.Token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ticket = await _context.Ticket
-                .Include(t => t.Author)
-                .Include(t => t.Solver)
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (ticket == null)
+            HttpClient client = RestService.GetClient();
+            HttpResponseMessage response = await client.GetAsync("api/Tickets/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Ticket ticket = JsonConvert.DeserializeObject<Ticket>(content);
+
+                return View(ticket);
+            }
+            else
             {
                 return NotFound();
             }
-
-            return View(ticket);
-        }*/
+        }
 
         // GET: Tickets/Create
         public IActionResult Create()
         {
-            ViewData["Username"] = RestService.Username;
+            // Only workers can use this page
+            if (RestService.Token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -69,7 +88,6 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Description")] Ticket ticket)
         {
-            
             if (ModelState.IsValid)
             {
                 HttpClient client = RestService.GetClient();
@@ -82,7 +100,8 @@ namespace WebApplication.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Create", "Tickets");
+                    ModelState.AddModelError(string.Empty, "Problem creating ticket, please try again.");
+                    return View(ticket);
                 }
             }
 

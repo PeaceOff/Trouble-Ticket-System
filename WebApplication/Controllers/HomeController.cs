@@ -1,6 +1,5 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication.Services;
 
 namespace WebApplication.Controllers
 {
@@ -8,12 +7,14 @@ namespace WebApplication.Controllers
     {
         public IActionResult Index()
         {
+            // Worker homepage is the tickets
+            if(RestService.Token != null)
+            {
+                return RedirectToAction("Index", "Tickets");
+            }
+
             return View();
         }
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

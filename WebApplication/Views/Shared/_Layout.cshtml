@@ -29,9 +29,6 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Trouble Ticket System</a>
             </div>
             <div class="navbar-collapse collapse">
-                <!--<ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                </ul>-->
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
@@ -40,7 +37,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - Trouble Ticket System</p>
+            <p class="text-center">&copy; 2018 - Trouble Ticket System</p>
         </footer>
     </div>
 

@@ -12,8 +12,6 @@ try {
   console.log('No file found. Assuming empty array')
 }
 
-console.log(tickets)
-
 // Connecting to the Message Queue
 amqp.connect('amqp://localhost', function (err, conn) {
   if (err) {
