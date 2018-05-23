@@ -88,7 +88,7 @@
       async answerTicket (id, answer) {
         if (answer !== '') {
           try {
-            await new TicketProxy().update(id, { id, answer })
+            await new TicketProxy().update(id, { text: answer })
             this.toggleSuccess()
             this.tickets = this.tickets.filter(ticket => ticket.id !== id)
           } catch (e) {

@@ -31,7 +31,7 @@ class TicketProxy extends Proxy {
    * @returns {Promise} The result in a promise.
    */
   getSolverTickets () {
-    return this.submit('get', `${this.endpoint}/SolverTickets`)
+    return this.submit('get', `${this.endpoint}/AssignedUnsolved`)
   }
 
   /**
