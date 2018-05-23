@@ -32,6 +32,8 @@
           <button class="btn btn-primary col-md-3" type="button" v-on:click="assignTicket(ticket.id)">Assign</button>
           </div>
           <p class="card-text">{{ ticket.description }}</p>
+          <br>
+          <p class="card-text"><b>Author: </b>{{ ticket.author.userName }}</p>
         </div>        
       </div>
     </div>
