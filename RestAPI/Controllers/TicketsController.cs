@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
+using RestAPI.DTO;
 using RestAPI.Entities;
 using RestAPI.Services;
 
@@ -86,7 +87,7 @@ namespace RestAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> AnswerTicket([FromRoute] int id, [FromBody] string answer)
+        public async Task<IActionResult> AnswerTicket([FromRoute] int id, [FromBody] Answer answer)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +102,7 @@ namespace RestAPI.Controllers
             }
 
             ticket.State = "Solved";
-            ticket.Answer = answer;
+            ticket.Answer = answer.Text;
 
             _context.Entry(ticket).State = EntityState.Modified;          
 
@@ -112,7 +113,7 @@ namespace RestAPI.Controllers
 
             string emailBody =
                 $"The ticket with the id {ticket.Id} is now solved. " +
-                $"The answer from our specialist solver was: {answer}. " +
+                $"The answer from our specialist solver was: {answer.Text}. " +
                 $"If you have any further questions please submit a new question! ";
 
             _emailSender.SendEmail
