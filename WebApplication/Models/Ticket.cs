@@ -28,7 +28,5 @@ namespace WebApplication.Models
         public String State { get; set; }
 
         public DateTime CreatedAt { get; set; }
-
-        public List<SecondaryTicket> SecondaryTickets { get; set; }
     }
 }

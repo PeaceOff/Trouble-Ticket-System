@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebApplication.Models;
 using WebApplication.Services;
@@ -103,7 +100,8 @@ namespace WebApplication.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Create", "Tickets");
+                    ModelState.AddModelError(string.Empty, "Problem creating ticket, please try again.");
+                    return View(ticket);
                 }
             }
 

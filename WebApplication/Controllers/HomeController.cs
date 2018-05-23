@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers
@@ -18,9 +16,5 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
