@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Data;
+using RestAPI.DTO;
 using RestAPI.Entities;
 using RestAPI.Services;
 
@@ -96,7 +97,7 @@ namespace RestAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> AnswerSecondaryTicket([FromRoute] int id, [FromBody] string answer)
+        public async Task<IActionResult> AnswerSecondaryTicket([FromRoute] int id, [FromBody] Answer answer)
         {
             if (!ModelState.IsValid)
             {
@@ -110,7 +111,7 @@ namespace RestAPI.Controllers
                 return NotFound();
             }
 
-            secondaryTicket.Answer = answer;
+            secondaryTicket.Answer = answer.Text;
 
             try
             {
@@ -143,7 +144,7 @@ namespace RestAPI.Controllers
             _context.SecondaryTicket.Add(secondaryTicket);
 
             Ticket ticket = _context.Ticket.Single(t => t.Id == secondaryTicket.TicketId);
-            ticket.State = "WaitingForAnswers";
+            ticket.State = "Waiting For Answers";
             _context.Entry(ticket).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
