@@ -36,24 +36,28 @@ namespace WebApplication.Controllers
         }
 
         // GET: Tickets/Details/5
-        /*public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ticket = await _context.Ticket
-                .Include(t => t.Author)
-                .Include(t => t.Solver)
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (ticket == null)
+            HttpClient client = RestService.GetClient();
+            HttpResponseMessage response = await client.GetAsync("api/Tickets/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                Ticket ticket = JsonConvert.DeserializeObject<Ticket>(content);
+
+                return View(ticket);
+            }
+            else
             {
                 return NotFound();
             }
-
-            return View(ticket);
-        }*/
+        }
 
         // GET: Tickets/Create
         public IActionResult Create()
