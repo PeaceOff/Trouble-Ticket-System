@@ -7,7 +7,7 @@ namespace WebApplication.Services
 {
     public class RestService
     {
-        public static string BaseAddress = "http://localhost:63770";
+        public static string BaseAddress = "http://localhost:56722";
         private static HttpClient Client;
 
         public static void SetClient()
