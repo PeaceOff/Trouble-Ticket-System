@@ -63,7 +63,6 @@
 </template>
 
 <script>
-  import Message from '../../logic/messageQueue'
   import SecondaryTicketProxy from '@/proxies/SecondaryTicketProxy'
   
   export default {
@@ -74,22 +73,29 @@
         tickets: '',
         showAlert: false,
         showError: false,
-        showSuccess: false
+        showSuccess: false,
+        pooling: null
       }
     },
     async created () {
-      try {
-        const response = await new SecondaryTicketProxy().getSolverSecondaryTickets()
-        this.tickets = response
-        Message.openSolverMessageQueue(this.username, this.messageReceived)
-      } catch (e) {
-        console.log(e)
-      }
+      this.getTickets()
+
+      // Pooling unassigned tickets
+      this.pooling = setInterval(this.getTickets, 2000)
     },
     beforeDestroy () {
-      Message.closeSolverMessageQueue()
+      clearInterval(this.pooling)
     },
     methods: {
+      async getTickets () {
+        try {
+          const response = await new SecondaryTicketProxy().getSolverSecondaryTickets()
+          this.tickets = response
+          // Message.openSolverMessageQueue(this.username, this.messageReceived)
+        } catch (e) {
+          console.log(e)
+        }
+      },
       logout () {
         this.$store.dispatch('logout')
       },
