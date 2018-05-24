@@ -24,23 +24,14 @@
         </ul>
       </nav>
     </div>
-    <div class="alert alert-success fixed mx-5 text-center" role="alert" v-if="showSuccess">
+    <div class="alert alert-success fixed mx-5 text-center" role="alert" v-if="showSuccess" v-on:click="toggleSuccess()">
       Answer submitted!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleSuccess()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
-    <div class="alert alert-warning fixed mx-5 text-center" role="alert" v-if="showAlert">
+    <div class="alert alert-warning fixed mx-5 text-center" role="alert" v-if="showAlert" v-on:click="toggleAlert()">
       You must provide an answer before submitting!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleAlert()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
-    <div class="alert alert-danger fixed mx-5 text-center" role="alert" v-if="showError">
+    <div class="alert alert-danger fixed mx-5 text-center" role="alert" v-if="showError" v-on:click="toggleError()">
       An error occured with your request. Please try again later!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="toggleError()">
-          <span aria-hidden="true">&times;</span>
-        </button>
     </div>
     <div class="row justify-content-md-center mt-4">
       <div class="card border-secondary mb-3 col-md-12" v-bind:key="ticket.id" v-for="ticket in tickets">

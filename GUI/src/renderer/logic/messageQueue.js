@@ -1,7 +1,7 @@
 require('dotenv').config()
 const amqp = require('amqplib/callback_api')
 const jsonfile = require('jsonfile')
-const dept = process.env.DEPARTMENT_NAME || 'hello'
+const dept = process.env.DEPARTMENT_NAME || 'genius'
 const msgFile = `./${dept}.json`
 let tickets = []
 let solverConnection
