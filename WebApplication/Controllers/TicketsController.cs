@@ -23,14 +23,15 @@ namespace WebApplication.Controllers
             }
 
             HttpClient client = RestService.GetClient();
-            HttpResponseMessage response = await client.GetAsync("api/Tickets/");
+            HttpResponseMessage response = await client.GetAsync("api/Tickets/WorkerTickets");
 
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
                 IEnumerable<Ticket> tickets = JsonConvert.DeserializeObject<IEnumerable<Ticket>>(content);
 
-                tickets = tickets.Where(t => t.Author.UserName == RestService.Username).OrderBy(t => t.CreatedAt);
+                tickets = tickets.OrderBy(t => t.CreatedAt);
+
                 return View(tickets);
             }
             else
