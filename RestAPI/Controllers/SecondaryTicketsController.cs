@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,21 +28,29 @@ namespace RestAPI.Controllers
         [HttpGet]
         public IEnumerable<SecondaryTicket> GetSecondaryTicket()
         {
-            return _context.SecondaryTicket.Include(st => st.Ticket);
+            return _context.SecondaryTicket;
         }
 
         [HttpGet("UnassignedSecondaryTickets")]
         public IEnumerable<SecondaryTicket> GetUnassignedSecondaryTickets()
         {
-            return _context.SecondaryTicket.Include(st => st.Ticket).Where(st => st.Answer == null).ToList();
+            return _context.SecondaryTicket.Where(st => st.Answer == null).ToList();
         }
 
         [HttpGet("SolverUnsolvedSecondaryTickets")]
+        [Authorize]
         public IEnumerable<SecondaryTicket> GetSolverUnsolvedSecondaryTickets()
         {
             string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            return _context.SecondaryTicket.Include(st => st.Ticket).Where(st => st.Ticket.SolverId == id && st.Ticket.State != "Solved").ToList();
+            IEnumerable<SecondaryTicket> stickets = _context.SecondaryTicket.Where(st => st.Ticket.SolverId == id && st.Ticket.State != "Solved").ToList();
+            foreach(SecondaryTicket sticket in stickets)
+            {
+                sticket.Ticket = _context.Ticket.SingleOrDefaultAsync(t => t.Id == sticket.TicketId).Result;
+                sticket.Ticket.SecondaryTickets = new List<SecondaryTicket>();
+            }
+
+            return stickets;
         }
 
         [HttpGet("{id}")]
