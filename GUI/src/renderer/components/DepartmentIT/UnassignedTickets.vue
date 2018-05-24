@@ -48,14 +48,18 @@ export default {
   data () {
     return {
       username: this.$store.getters.getUsername,
-      tickets: ''
+      tickets: '',
+      pooling: null
     }
   },
   async created () {
     this.getUnassignedTickets()
 
     // Pooling unassigned tickets
-    setInterval(this.getUnassignedTickets, 2000)
+    this.pooling = setInterval(this.getUnassignedTickets, 2000)
+  },
+  beforeDestroy () {
+    clearInterval(this.pooling)
   },
   methods: {
     logout () {

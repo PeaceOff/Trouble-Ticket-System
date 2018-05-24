@@ -291,3 +291,5 @@ __pycache__/
 *.xsd.cs
 
 GUI/memes\.json
+
+GUI/genius\.json
