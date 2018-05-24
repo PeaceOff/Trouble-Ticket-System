@@ -48,6 +48,8 @@
           <div class="col-md-6">
           <h5 class="card-title">{{ ticket.title }}</h5>
           <p class="card-text">{{ ticket.description }}</p>
+          <br>
+          <p class="card-text"><b>Ticket: </b>{{ ticket.ticket.title }}</p>
           </div>
           <div class="col-md-6">
           <h6 class="card-text">Department Answer:</h6>
