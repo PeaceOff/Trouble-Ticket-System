@@ -185,6 +185,56 @@ namespace RestAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("RestAPI.Entities.SecondaryTicket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Answer");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("TicketId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("SecondaryTicket");
+                });
+
+            modelBuilder.Entity("RestAPI.Entities.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Answer");
+
+                    b.Property<string>("AuthorId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("SolverId");
+
+                    b.Property<string>("State");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("SolverId");
+
+                    b.ToTable("Ticket");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("RestAPI.Entities.ApplicationRole")
@@ -228,6 +278,25 @@ namespace RestAPI.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RestAPI.Entities.SecondaryTicket", b =>
+                {
+                    b.HasOne("RestAPI.Entities.Ticket", "Ticket")
+                        .WithMany("SecondaryTickets")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RestAPI.Entities.Ticket", b =>
+                {
+                    b.HasOne("RestAPI.Entities.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("RestAPI.Entities.ApplicationUser", "Solver")
+                        .WithMany()
+                        .HasForeignKey("SolverId");
                 });
 #pragma warning restore 612, 618
         }

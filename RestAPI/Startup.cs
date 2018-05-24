@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using RestAPI.Services;
+using System.Threading.Tasks;
 
 namespace RestAPI
 {
@@ -30,6 +31,8 @@ namespace RestAPI
         {
 
             services.AddTransient<JwtHelper>();
+
+            services.AddTransient<EmailSender>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -75,10 +78,12 @@ namespace RestAPI
             {
                 c.SwaggerDoc("v1", new Info { Title = "Trouble Ticket API", Version = "v1" });
             });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<ApplicationRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -86,6 +91,12 @@ namespace RestAPI
             }
 
             app.UseAuthentication();
+
+            app.UseCors(builder => builder
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
 
             app.UseMvc();
 
@@ -95,6 +106,10 @@ namespace RestAPI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trouble Ticket API");
             });
+
+           
+
+            new DatabaseSeed(roleManager).InitDBAsync().Wait();   
         }
     }
 }

@@ -1,0 +1,35 @@
+﻿@model WebApplication.Models.Ticket
+
+@{
+    ViewData["Title"] = "Ticket Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Ticket Details</h2>
+        <hr />
+    </div>
+    <div class="row">
+        <h3><b>Title:</b></h3>
+        @Html.DisplayFor(model => model.Title)
+    </div>
+    <div class="row">
+        <h3><b>Description:</b></h3>
+        <p>@Html.DisplayFor(model => model.Title)</p>
+    </div>
+    <div class="row">
+        <h3><b>Answer:</b></h3>
+        <p>@Html.DisplayFor(model => model.Answer)</p>
+    </div>
+    <div class="row">
+        <br />
+        <h5><b>State:</b> @Html.DisplayTextFor(model => model.State)</h5>
+        <h5><b>Solver:</b> @Html.DisplayTextFor(model => model.Solver)</h5>
+        <h5><b>Created at:</b> @Html.DisplayTextFor(model => model.CreatedAt)</h5>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,9 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+        [Required]
+        [RegularExpression(@"^([^0-9]*)$", ErrorMessage = "Only allowed alphabet character in name")]
+        [StringLength(60, MinimumLength = 3)]
+        [Display(Name = "Name")]
+        public string Username { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -19,5 +27,7 @@ namespace WebApplication.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string Role { get; set; }
     }
 }
