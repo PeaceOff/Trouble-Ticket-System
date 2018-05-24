@@ -38,7 +38,9 @@ namespace RestAPI.Controllers
         [Authorize]
         public IEnumerable<Ticket> GetAssignedUnsolved()
         {
-            return _context.Ticket.Include(t => t.Solver).Include(t => t.Author).Where(t => t.State == "Assigned" || t.State == "Waiting For Answers").ToList();
+            string id = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            return _context.Ticket.Include(t => t.Solver).Include(t => t.Author).Where(t => (t.State == "Assigned" || t.State == "Waiting For Answers") && t.AuthorId == id).ToList();
         }
 
         [HttpGet("UnassignedTickets")]
